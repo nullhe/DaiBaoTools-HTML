@@ -51,6 +51,14 @@ const categories = [
     ],
   },
   {
+    key: 'image',
+    name: '图片工具',
+    icon: '🖼️',
+    tools: [
+      { key: 'icon-tool', name: '图标处理', factory: DaibaoTools.createIconTool },
+    ],
+  },
+  {
     key: 'other',
     name: '其他分类',
     icon: '🧩',

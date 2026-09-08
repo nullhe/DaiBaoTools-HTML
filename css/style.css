@@ -506,6 +506,12 @@ body {
   gap: 6px;
 }
 
+/* 禁止纵向拉伸/压缩，保证输入框与下拉框高度稳定为 40px */
+.tool-field > .tool-input,
+.tool-field > .tool-select {
+  flex: 0 0 auto;
+}
+
 .tool-label {
   font-size: 13px;
   color: var(--text-main);
@@ -687,7 +693,15 @@ body {
   flex-wrap: wrap;
 }
 
-.tool-inline .tool-input {
+/* 仅作用于 .tool-inline 的直接子输入框。
+   用后代选择器会误伤「.tool-inline > .tool-field > input」这类嵌套结构：
+   .tool-field 是 column 方向，flex:1 会沿高度伸缩并把 height 覆盖掉。 */
+.tool-inline > .tool-input {
+  flex: 1;
+  min-width: 130px;
+}
+
+.tool-inline > .tool-field {
   flex: 1;
   min-width: 130px;
 }
@@ -919,5 +933,289 @@ body {
   .tool-cols {
     grid-template-columns: 1fr;
     gap: 22px;
+  }
+}
+
+/* ==================== 鼠标点击特效 ==================== */
+
+.click-effect-item {
+  position: fixed;
+  z-index: 2147483000;
+  font-weight: bold;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  transform: translate(-50%, 0);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  animation: click-effect-rise 1500ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes click-effect-rise {
+  0% {
+    transform: translate(-50%, 0) scale(0.6);
+    opacity: 0;
+  }
+  12% {
+    transform: translate(calc(-50% + var(--ce-drift, 0px) * 0.15), -18px) scale(1.12);
+    opacity: 1;
+  }
+  35% {
+    transform: translate(calc(-50% + var(--ce-drift, 0px) * 0.5), -60px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--ce-drift, 0px)), -160px) scale(0.94);
+    opacity: 0;
+  }
+}
+
+/* 关闭特效时不产生任何元素（JS 侧也会拦截，双保险） */
+body.click-effect-off .click-effect-item {
+  display: none;
+}
+
+/* 顶部开关按钮 */
+.effect-toggle {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  margin-left: 14px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  line-height: 1;
+  color: var(--text-main);
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s, background 0.15s;
+}
+
+.effect-toggle:hover {
+  transform: translateY(-1px);
+  background: var(--bg-card);
+}
+
+.effect-toggle:active {
+  transform: translateY(0);
+}
+
+.effect-toggle.is-off {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+
+@media (max-width: 768px) {
+  .effect-toggle {
+    margin-left: 8px;
+  }
+}
+
+/* 尊重系统的「减少动态效果」设置 */
+@media (prefers-reduced-motion: reduce) {
+  .click-effect-item {
+    animation-duration: 600ms;
+  }
+}
+
+/* ========================
+   图标处理：页内竖直菜单
+   ======================== */
+.it-layout {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.it-menu {
+  width: 150px;
+  flex-shrink: 0;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 8px;
+  align-self: flex-start;
+  position: sticky;
+  top: 16px;
+}
+
+.it-menu-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0 12px 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.it-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.it-menu-item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.it-menu-item:hover {
+  background: #eef2f7;
+  color: var(--primary-dark);
+}
+
+.it-menu-item.active {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 500;
+}
+
+.it-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ========================
+   图标排列
+   ======================== */
+.iw-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.iw-file-label {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.iw-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px 22px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.iw-ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.iw-ctrl .tool-label strong {
+  color: var(--primary-dark);
+}
+
+.iw-wall {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(10, 1fr);
+  background: #eef0f3;
+  border: 1px dashed transparent;
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 220px;
+  align-content: start;
+}
+
+.iw-wall.iw-dragover {
+  border-color: var(--primary);
+  background: #e8f0fe;
+}
+
+.iw-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.iw-card {
+  position: relative;
+  aspect-ratio: 1;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iw-card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.iw-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 13px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  padding: 0;
+}
+
+.iw-card:hover .iw-remove {
+  opacity: 1;
+}
+
+.iw-remove:hover {
+  background: #ef4444;
+}
+
+@media (max-width: 768px) {
+  .it-layout {
+    flex-direction: column;
+  }
+
+  .it-menu {
+    width: 100%;
+    position: static;
+  }
+
+  .it-menu-list {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .it-menu-item {
+    white-space: nowrap;
+  }
+
+  .iw-wall {
+    padding: 10px;
   }
 }

@@ -14,7 +14,7 @@
 
 ### 方式一：双击打开（推荐）
 
-直接双击项目根目录下的 **`首页.html`** 即可使用，**不需要安装任何东西，也不需要启动服务器**。
+直接双击项目根目录下的 **`index.html`** 即可使用，**不需要安装任何东西，也不需要启动服务器**。
 
 > 本项目刻意避开了 ES Module（`type="module"` + `import`）。因为 `file://` 协议下页面 origin 为 `null`，模块脚本会被浏览器同源策略拦截导致白屏。全部脚本改用普通 `<script>` 顺序加载 + 全局命名空间，从而在 `file://` 下也能正常运行。
 
@@ -30,19 +30,17 @@ python -m http.server 8080
 npx serve .
 ```
 
-然后浏览器访问 `http://localhost:8080/首页.html`。
+然后浏览器访问 `http://localhost:8080`。
 
 ### 方式三：GitHub Pages
 
-仓库 Settings → Pages → Source 选择分支与根目录即可发布。
-
-> ⚠️ Pages 默认入口为 `index.html`。若需 Pages 直接命中首页，请把 `首页.html` 改名（或复制一份）为 `index.html`，否则需要访问 `https://<用户名>.github.io/DaiBaoTools-HTML/首页.html`。
+仓库 Settings → Pages → Source 选择分支与根目录即可发布，访问 `https://<用户名>.github.io/DaiBaoTools-HTML/`。
 
 ---
 
 ## 功能一览
 
-共 **18 个工具**，按 5 个分类组织，顶部导航切换分类、二级导航切换工具，全程无刷新。
+共 **19 个工具**，按 6 个分类组织，顶部导航切换分类、二级导航切换工具，全程无刷新。
 
 ### 💰 财务工具
 
@@ -87,20 +85,28 @@ npx serve .
 | **随机数生成** | 使用 `crypto.getRandomValues`（优于 `Math.random`），支持整数 / 小数、指定范围、是否去重 |
 | **颜色选择器** | HEX / RGB / HSL 三向实时同步，取色与一键复制 |
 
+### 🖼️ 图片工具
+
+| 工具 | 说明 |
+|------|------|
+| **图标处理** | 功能页内含左侧竖直子菜单，子功能可扩展注册。当前包含**图标排列**：批量选择本地图片（支持拖入），自动排列成图标墙；每行个数、行数（固定 / 自动）、卡片间距、圆角、图标留白、适配方式（contain / cover）均可调，支持分批追加与单张移除 |
+
 ---
 
 ## 目录结构
 
 ```
 呆宝工具箱/
-├── 首页.html                    # 单页应用入口（双击即可打开）
+├── index.html                  # 单页应用入口（双击即可打开）
 ├── README.md
+├── LICENSE
 ├── assets/
 │   └── logo.png                 # 站点图标 / favicon
 ├── css/
 │   └── style.css                # 全局样式 + 通用工具组件样式
 └── js/
     ├── app.js                   # 应用主入口：分类导航、工具切换、渲染调度
+    ├── click-effect.js          # 全局鼠标点击特效（原生实现，可开关）
     └── tools/                   # 各工具模块，一个文件一个工具
         ├── shared.js            # 共用小工具：复制文本、轻提示
         ├── vat-calculator.js
@@ -120,8 +126,34 @@ npx serve .
         ├── bmi-calculator.js
         ├── unit-converter.js
         ├── random-generator.js
-        └── color-picker.js
+        ├── color-picker.js
+        ├── icon-tool.js         # 图标处理外壳（页内竖直子菜单）
+        └── icon-arrange.js      # 图标处理 · 图标排列子功能
 ```
+
+---
+
+## 鼠标点击特效
+
+点击页面任意位置，光标处会冒出一个文字，向上飘升并淡出。
+
+- 词库默认使用「富强 民主 和谐 文明 自由 平等 公正 法治 爱国 敬业 诚信 友善」，按顺序循环
+- 原生实现，动画走 CSS Animation，不占用 JS 主线程；`pointer-events: none`，不挡任何点击
+- **顶部导航栏右侧的 ✨ 按钮可随时开关**，状态存 localStorage，下次打开自动恢复
+- 在输入框 / 文本域 / 下拉框内点击不会触发，避免干扰录入
+
+自定义改 `js/click-effect.js` 顶部的 `CONFIG`：
+
+| 配置 | 说明 |
+|------|------|
+| `words` | 冒出来的文字数组 |
+| `colors` | 候选配色，每次随机取一个 |
+| `duration` / `rise` | 动画时长（ms）/ 上飘距离（px） |
+| `minFontSize` / `maxFontSize` | 随机字号范围 |
+| `maxAlive` | 同屏文字上限，防止狂点堆积 |
+| `skipFormFields` | 是否在表单元素内跳过，设 `false` 则全页面都触发 |
+
+> 改动 `duration` 时，需同步修改 `css/style.css` 中 `.click-effect-item` 的 `animation-duration`。
 
 ---
 
