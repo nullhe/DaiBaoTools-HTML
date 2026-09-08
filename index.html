@@ -6,6 +6,15 @@
   <title>呆宝工具箱</title>
   <link rel="icon" type="image/png" href="assets/logo.png" data-page-node-id="SqEGFP8nIdsG8KRNVqCHfX">
   <link rel="stylesheet" href="css/style.css" data-page-node-id="NQFGEED8etiVMBYuBOtIci">
+  <link rel="stylesheet" href="css/motion.css">
+  <script>
+    // 主题尽早生效，避免刷新时闪一下浅色（必须在样式加载后、内容渲染前）
+    try {
+      if (localStorage.getItem('daibao.theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) {}
+  </script>
 </head>
 <body data-page-node-id="vAwmSx2zjiytaJMcvU4tIm">
   <div class="app" data-page-node-id="81UEk0KvroSTeYAqLGezIG">
@@ -37,14 +46,22 @@
             <span class="nav-icon" data-page-node-id="CGIFMXNGoBTuFIeA1Xm8hX">🖼️</span>
             <span class="nav-text" data-page-node-id="v5MUQjGNYmlgyGVAbjuENG">图片工具</span>
           </li>
+          <li class="nav-item" data-category="music">
+            <span class="nav-icon">🎵</span>
+            <span class="nav-text">音乐音频</span>
+          </li>
           <li class="nav-item" data-category="other" data-page-node-id="t7OXD2dv0aJH1zGTrbLy7Z">
             <span class="nav-icon" data-page-node-id="vaoI6ZzV6pjmgsj5aqxTYU">🧩</span>
             <span class="nav-text" data-page-node-id="9QyooeQxIAgZA4BlThXX7M">其他分类</span>
           </li>
         </ul>
       </nav>
-      <button class="effect-toggle" id="clickEffectToggle" type="button"
-        title="点击特效：开启（点此关闭）" aria-label="点击特效开关" aria-pressed="true">✨</button>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" type="button"
+          title="切换深色模式" aria-label="主题切换">🌙</button>
+        <button class="effect-toggle" id="clickEffectToggle" type="button"
+          title="点击特效：开启（点此关闭）" aria-label="点击特效开关" aria-pressed="true">✨</button>
+      </div>
     </header>
 
     <!-- 二级工具导航 -->
@@ -83,9 +100,22 @@
   <script src="js/tools/url-codec.js"></script>
   <script src="js/tools/jwt-parser.js"></script>
   <script src="js/tools/text-diff.js"></script>
+  <script src="js/tools/music-tool.js"></script>
+  <script src="js/tools/kugou-lyric.js"></script>
+  <script src="js/tools/qqmusic-lyric.js"></script>
+  <script src="js/tools/migumusic.js"></script>
+  <script src="js/tools/online-music-tool.js"></script>
+  <script src="js/tools/kuwo-music.js"></script>
+  <script src="js/tools/netease-music.js"></script>
+  <script src="js/tools/fun-calc-tool.js"></script>
+  <script src="js/tools/roll-pig.js"></script>
+  <script src="js/tools/five-element-dressing.js"></script>
+  <script src="js/tools/answer-book.js"></script>
+  <script src="js/tools/tarot.js"></script>
   <script src="js/tools/icon-tool.js"></script>
   <script src="js/tools/icon-arrange.js"></script>
   <script src="js/click-effect.js"></script>
+  <script src="js/motion.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

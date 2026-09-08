@@ -28,3 +28,22 @@ window.DaibaoTools.toast = function (msg) {
     el.remove();
   }, 2200);
 };
+
+/**
+ * 复制文本 + 按钮打勾反馈
+ * @param {string} text   要复制的内容
+ * @param {HTMLElement} [btn] 触发复制的按钮，传入后会闪一个 ✓
+ */
+window.DaibaoTools.copyWithFeedback = function (text, btn) {
+  function done() {
+    if (window.DaibaoMotion && typeof window.DaibaoMotion.flashOk === 'function') {
+      window.DaibaoMotion.flashOk(btn);
+    } else {
+      window.DaibaoTools.toast('已复制');
+    }
+  }
+  var p = window.DaibaoTools.copyText(text);
+  if (p && typeof p.then === 'function') p.then(done, done);
+  else done();
+  return p;
+};

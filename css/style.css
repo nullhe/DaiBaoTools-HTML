@@ -1219,3 +1219,948 @@ body.click-effect-off .click-effect-item {
     padding: 10px;
   }
 }
+
+/* ==================== QQ Music 歌词 ==================== */
+
+.qm-search {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.qm-search .tool-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.qm-format {
+  width: auto;
+  min-width: 170px;
+}
+
+.qm-status {
+  margin-top: 12px;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid transparent;
+}
+
+.qm-status.is-info {
+  background: var(--bg-page);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.qm-status.is-ok {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+.qm-status.is-warn {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+.qm-status.is-error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+html[data-theme='dark'] .qm-status.is-ok {
+  background: rgba(6, 95, 70, 0.24);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.32);
+}
+
+html[data-theme='dark'] .qm-status.is-warn {
+  background: rgba(120, 53, 15, 0.24);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.32);
+}
+
+html[data-theme='dark'] .qm-status.is-error {
+  background: rgba(127, 29, 29, 0.26);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.32);
+}
+
+/* --- 搜索结果 --- */
+.qm-results {
+  margin-top: 14px;
+  max-height: 320px;
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.qm-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+}
+
+.qm-result-cover {
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: none;
+  background: var(--bg-page);
+}
+
+.qm-result-cover.is-broken {
+  visibility: hidden;
+}
+
+.qm-result-cover.is-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: var(--bg-page);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.qm-result-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.qm-result-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-title);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qm-result-sub {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qm-result-dur {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 酷我结果卡片：时长列（秒数转 mm:ss） */
+.qm-result-time {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 38px;
+  text-align: right;
+}
+
+/* --- 歌词区 --- */
+.qm-lyric-wrap {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.qm-song-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.qm-cover {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex: none;
+  background: var(--bg-page);
+  box-shadow: var(--shadow);
+}
+
+.qm-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.qm-cover.is-broken {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.qm-cover.is-broken::after {
+  content: '🎵';
+}
+
+.qm-cover.is-broken img {
+  display: none;
+}
+
+.qm-song-name {
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--text-title);
+}
+
+.qm-song-sub {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.qm-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 0 14px;
+  flex-wrap: wrap;
+}
+
+.qm-toolbar-right {
+  display: flex;
+  gap: 8px;
+}
+
+/* --- 时间开关 --- */
+.qm-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.qm-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.qm-switch-track {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  flex: none;
+}
+
+.qm-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.qm-switch input:checked + .qm-switch-track {
+  background: var(--primary);
+}
+
+.qm-switch input:checked + .qm-switch-track .qm-switch-thumb {
+  left: 20px;
+}
+
+.qm-switch input:focus-visible + .qm-switch-track {
+  box-shadow: var(--ring);
+}
+
+.qm-switch-label {
+  font-size: 13px;
+  color: var(--text-main);
+}
+
+/* --- 歌词瀑布流 --- */
+.qm-lyric {
+  max-height: 480px;
+  overflow-y: auto;
+  padding: 22px 26px;
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.qm-line {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 5px 8px;
+  margin: 0 -8px;
+  border-radius: var(--radius);
+  line-height: 1.75;
+}
+
+.qm-line-time {
+  flex: none;
+  width: 64px;
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: "SF Mono", Consolas, Monaco, monospace;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.72;
+}
+
+.qm-line-text {
+  flex: 1;
+  font-size: 15px;
+  color: var(--text-title);
+  word-break: break-word;
+}
+
+/* 制作信息行弱化，与歌词正文区分 */
+.qm-line.is-credit .qm-line-text {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.qm-loading {
+  padding: 30px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.qm-raw {
+  margin: 0;
+  padding: 16px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: Consolas, Monaco, monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-main);
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 440px;
+  overflow: auto;
+}
+
+@media (max-width: 768px) {
+  .qm-search .tool-input {
+    min-width: 100%;
+  }
+
+  .qm-lyric {
+    padding: 16px 14px;
+  }
+
+  .qm-line {
+    gap: 10px;
+  }
+
+  .qm-line-time {
+    width: 54px;
+    font-size: 11px;
+  }
+
+  .qm-line-text {
+    font-size: 14px;
+  }
+
+  .qm-toolbar-right {
+    width: 100%;
+  }
+}
+
+/* ==================== 咪咕音乐 / 在线听歌 ==================== */
+
+.qm-song-info {
+  min-width: 0;
+}
+
+.mm-detail {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.mm-vip {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  color: #b45309;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 999px;
+}
+
+html[data-theme='dark'] .mm-vip {
+  color: #fcd34d;
+  background: rgba(120, 53, 15, 0.3);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.mm-audio {
+  width: 100%;
+  margin: 18px 0 6px;
+  border-radius: var(--radius);
+  outline: none;
+}
+
+.mm-quality {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0 2px;
+}
+
+.mm-quality-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.mm-qbtn {
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--text-main);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mm-qbtn:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+.mm-qbtn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 500;
+}
+
+.mm-src {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
+/* 当前播放歌词行高亮 + 跟随滚动锚点 */
+.qm-line.is-active {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.qm-line.is-active .qm-line-text {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+html[data-theme='dark'] .qm-line.is-active {
+  background: rgba(96, 165, 250, 0.16);
+}
+
+html[data-theme='dark'] .qm-line.is-active .qm-line-text {
+  color: #93c5fd;
+}
+
+@media (max-width: 768px) {
+  .mm-quality-label {
+    width: 100%;
+  }
+}
+
+/* ========================
+   趣味测算 / 你是小猪
+   ======================== */
+.rp-card {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.rp-head {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.rp-head .tool-title {
+  font-size: 20px;
+  margin: 0 0 6px;
+}
+
+.rp-sub {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.rp-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.rp-result {
+  min-height: 120px;
+}
+
+.rp-pig {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  animation: rpPop 0.35s ease;
+}
+
+@keyframes rpPop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rp-img-wrap {
+  width: 160px;
+  height: 160px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rp-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rp-info {
+  width: 100%;
+  text-align: center;
+}
+
+.rp-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+}
+
+.rp-desc {
+  font-size: 14px;
+  color: var(--text-main);
+  margin-bottom: 12px;
+}
+
+.rp-analysis {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.rp-label {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--primary);
+  margin-right: 6px;
+}
+
+.rp-status {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 13px;
+  min-height: 18px;
+  color: var(--text-muted);
+}
+
+.rp-status.ok {
+  color: #16a34a;
+}
+
+.rp-status.warn {
+  color: #dc2626;
+}
+
+[data-theme='dark'] .rp-pig,
+[data-theme='dark'] .rp-analysis {
+  background: #1f2733;
+}
+
+[data-theme='dark'] .rp-img-wrap,
+[data-theme='dark'] .rp-analysis {
+  border-color: #2c3744;
+}
+
+[data-theme='dark'] .rp-name {
+  color: var(--primary);
+}
+
+/* ===== 五行穿衣 ===== */
+.fed-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.fed-head {
+  text-align: center;
+  margin-bottom: 18px;
+}
+.fed-head .tool-title {
+  font-size: 20px;
+  margin: 0 0 6px;
+}
+.fed-sub {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0;
+}
+.fed-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.fed-label-inline {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.fed-date {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 150px;
+}
+.fed-result {
+  min-height: 120px;
+}
+.fed-day {
+  text-align: center;
+  font-size: 15px;
+  color: var(--text-main);
+  margin-bottom: 18px;
+}
+.fed-element {
+  display: inline-block;
+  min-width: 34px;
+  padding: 2px 12px;
+  margin: 0 6px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+}
+.fed-date-tag {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.fed-group {
+  margin-bottom: 18px;
+}
+.fed-group-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  border-left: 4px solid var(--primary);
+}
+.fed-group-title.best {
+  color: #e11d48;
+  border-left-color: #e11d48;
+}
+.fed-group-title.good {
+  color: #16a34a;
+  border-left-color: #16a34a;
+}
+.fed-group-title.avoid {
+  color: #a16207;
+  border-left-color: #a16207;
+}
+.fed-colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.fed-swatch {
+  width: 96px;
+  text-align: center;
+}
+.fed-chip {
+  height: 64px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.fed-chip.avoid {
+  opacity: 0.9;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.12);
+}
+.fed-swatch:hover .fed-chip {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
+}
+.fed-meta {
+  margin-top: 6px;
+  line-height: 1.4;
+}
+.fed-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+.fed-hex {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.fed-desc {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.fed-desc .fed-label {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--primary);
+  margin-right: 6px;
+}
+.fed-status {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 13px;
+  min-height: 18px;
+  color: var(--text-muted);
+}
+.fed-status.ok {
+  color: #16a34a;
+}
+.fed-status.warn {
+  color: #dc2626;
+}
+
+[data-theme='dark'] .fed-desc {
+  background: #1f2733;
+  border-color: #2c3744;
+}
+[data-theme='dark'] .fed-chip {
+  border-color: #2c3744;
+}
+
+/* ========================
+   趣味测算 / 答案之书
+   ======================== */
+.aob-card {
+  max-width: 560px;
+  margin: 0 auto;
+}
+.aob-head {
+  text-align: center;
+  margin-bottom: 22px;
+}
+.aob-head .tool-title {
+  font-size: 20px;
+  margin: 0 0 6px;
+}
+.aob-sub {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+.aob-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 30px 0;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.aob-question {
+  font-size: 15px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+.aob-open {
+  font-size: 16px;
+  padding: 12px 28px;
+}
+.aob-result {
+  text-align: center;
+  padding: 34px 24px;
+  background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgba(220, 38, 38, 0.08);
+}
+.aob-answer {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--primary);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+.aob-en {
+  font-size: 15px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+}
+.aob-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.aob-flip {
+  animation: aobFlip 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-origin: center top;
+}
+@keyframes aobFlip {
+  0% {
+    opacity: 0;
+    transform: rotateX(85deg) translateY(-12px);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg) translateY(0);
+  }
+}
+.aob-status {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 13px;
+  min-height: 18px;
+  color: var(--text-muted);
+}
+.aob-status.ok {
+  color: #16a34a;
+}
+.aob-status.warn {
+  color: #dc2626;
+}
+
+[data-theme='dark'] .aob-stage {
+  background: #1c2530;
+  border-color: #2c3744;
+}
+[data-theme='dark'] .aob-result {
+  background: linear-gradient(135deg, #2a2018 0%, #2a1c1c 100%);
+  border-color: #3a2c2c;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================
+   趣味测算 / 塔罗牌
+   ======================== */
+.tr-card { max-width: 940px; margin: 0 auto; }
+.tr-head { text-align: center; margin-bottom: 14px; }
+.tr-sub { color: #5f5e5a; font-size: 13px; margin: 6px 0 0; }
+.tr-form { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 18px; }
+.tr-input { flex: 1 1 240px; max-width: 360px; }
+.tr-result { min-height: 80px; }
+.tr-status { text-align: center; margin-top: 14px; font-size: 13px; color: #5f5e5a; }
+.tr-status.ok { color: #3b6d11; }
+.tr-status.warn { color: #854f0b; }
+
+.tr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+@media (max-width: 720px) { .tr-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.tr-item {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.tr-pos { font-weight: 500; font-size: 14px; color: #2c2c2a; }
+.tr-posdesc { font-size: 12px; color: #5f5e5a; margin-top: 4px; min-height: 32px; line-height: 1.4; }
+.tr-img-wrap { margin: 10px 0; width: 100%; display: flex; justify-content: center; }
+.tr-img { width: 100%; max-width: 130px; height: auto; border-radius: 8px; background: #fff; }
+.tr-img-fallback {
+  width: 130px; height: 180px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; background: #f1efe8;
+}
+.tr-name { margin: 4px 0 6px; font-size: 13px; }
+.tr-name-cn { font-weight: 500; color: #2c2c2a; }
+.tr-name-en { color: #5f5e5a; font-size: 12px; margin-left: 4px; }
+.tr-badge { font-size: 12px; padding: 2px 10px; border-radius: 999px; margin-bottom: 8px; }
+.tr-badge.up { background: rgba(99, 161, 34, 0.15); color: #3b6d11; }
+.tr-badge.rev { background: rgba(162, 45, 45, 0.14); color: #a32d2d; }
+.tr-reading { font-size: 13px; line-height: 1.5; color: #2c2c2a; }
+
+[data-theme='dark'] .tr-head .tr-sub,
+[data-theme='dark'] .tr-status { color: #8a98a8; }
+[data-theme='dark'] .tr-card { background: transparent; }
+[data-theme='dark'] .tr-item { background: #1c242e; border-color: #2c3744; }
+[data-theme='dark'] .tr-pos { color: #e8edf2; }
+[data-theme='dark'] .tr-posdesc { color: #8a98a8; }
+[data-theme='dark'] .tr-img { background: #0e141b; }
+[data-theme='dark'] .tr-img-fallback { background: #11181f; }
+[data-theme='dark'] .tr-name-cn { color: #e8edf2; }
+[data-theme='dark'] .tr-name-en { color: #8a98a8; }
+[data-theme='dark'] .tr-reading { color: #d4dbe3; }
+[data-theme='dark'] .tr-badge.up { background: rgba(151, 196, 89, 0.2); color: #97c459; }
+[data-theme='dark'] .tr-badge.rev { background: rgba(240, 149, 149, 0.18); color: #f09595; }

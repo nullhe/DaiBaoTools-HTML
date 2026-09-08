@@ -48,6 +48,8 @@ const categories = [
       { key: 'date-calculator', name: '日期计算器', factory: DaibaoTools.createDateCalculator },
       { key: 'bmi', name: 'BMI 计算器', factory: DaibaoTools.createBmiCalculator },
       { key: 'unit-converter', name: '单位换算', factory: DaibaoTools.createUnitConverter },
+      { key: 'random', name: '随机数生成', factory: DaibaoTools.createRandomGenerator },
+      { key: 'color-picker', name: '颜色选择器', factory: DaibaoTools.createColorPicker },
     ],
   },
   {
@@ -59,12 +61,20 @@ const categories = [
     ],
   },
   {
+    key: 'music',
+    name: '音乐音频',
+    icon: '🎵',
+    tools: [
+      { key: 'music-tool', name: '歌词下载', factory: DaibaoTools.createMusicTool },
+      { key: 'online-music-tool', name: '在线音乐', factory: DaibaoTools.createOnlineMusicTool },
+    ],
+  },
+  {
     key: 'other',
     name: '其他分类',
     icon: '🧩',
     tools: [
-      { key: 'random', name: '随机数生成', factory: DaibaoTools.createRandomGenerator },
-      { key: 'color-picker', name: '颜色选择器', factory: DaibaoTools.createColorPicker },
+      { key: 'fun-calc-tool', name: '趣味测算', factory: DaibaoTools.createFunCalcTool },
     ],
   },
 ];
@@ -77,6 +87,22 @@ let currentTool = 'vat-calculator';
 const mainNav = document.getElementById('mainNav');
 const subNavList = document.getElementById('subNavList');
 const appMain = document.getElementById('appMain');
+
+/**
+ * 渲染完成后的统一钩子：交给动效层做入场动画、数字滚动监听与指示条同步。
+ * 动效层未加载时静默跳过，不影响功能。
+ */
+function afterRender(container) {
+  if (window.DaibaoMotion && typeof window.DaibaoMotion.onContentChange === 'function') {
+    try {
+      window.DaibaoMotion.onContentChange(container || null);
+    } catch (e) {
+      /* 动效出错不能影响工具本身 */
+    }
+  } else if (window.DaibaoMotion) {
+    window.DaibaoMotion.syncIndicators();
+  }
+}
 
 // 占位渲染函数（用于未实现的工具）
 function renderPlaceholder(container, toolName) {
@@ -118,6 +144,8 @@ function renderMainNav() {
       renderTool();
     });
   });
+
+  afterRender(null);
 }
 
 // 渲染二级导航
@@ -144,6 +172,8 @@ function renderSubNav() {
       renderTool();
     });
   });
+
+  afterRender(null);
 }
 
 // 渲染当前工具
@@ -169,6 +199,8 @@ function renderTool() {
       `;
     }
   }
+
+  afterRender(container);
 }
 
 // 初始化

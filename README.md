@@ -40,7 +40,9 @@ npx serve .
 
 ## 功能一览
 
-共 **19 个工具**，按 6 个分类组织，顶部导航切换分类、二级导航切换工具，全程无刷新。
+共 **21 个工具**，按 7 个分类组织，顶部导航切换分类、二级导航切换工具，全程无刷新。
+
+> 📌 除下列工具外，其余全部为纯本地计算，断网也可用：「歌词下载」分类下的 **QQ Music 歌词** 与 **酷狗歌词** 需要访问第三方接口（OIAPI）。接口已开启跨域（`Access-Control-Allow-Origin: *`），双击 `index.html`（`file://`）直接调用也正常，无需本地服务器。
 
 ### 💰 财务工具
 
@@ -85,6 +87,15 @@ npx serve .
 | **随机数生成** | 使用 `crypto.getRandomValues`（优于 `Math.random`），支持整数 / 小数、指定范围、是否去重 |
 | **颜色选择器** | HEX / RGB / HSL 三向实时同步，取色与一键复制 |
 
+### 🎵 音乐音频
+
+功能页内含左侧竖直子菜单，子功能可扩展注册。
+
+| 工具 | 说明 |
+|------|------|
+| **QQ Music 歌词** | 通过 [OIAPI](https://www.oiapi.net/doc/id/121.html) 搜索歌曲并获取歌词，按时间轴排列成歌词瀑布流；**显示播放时间**开关（默认开启）控制每行前是否显示时间轴；自动识别「作词 / 作曲 / 编曲」等制作信息行并弱化展示；支持**下载 TXT**（带 BOM 与 CRLF，Windows 记事本打开不乱码，文件名 `歌手 - 歌名.txt`）与一键复制；可选 LRC / QRC / KSC 三种格式，后两者按原始内容展示 |
+| **酷狗歌词** | 通过 [OIAPI](https://www.oiapi.net/doc/id/11.html) 的 `Kggc` 接口实现：搜索歌曲 → 在结果列表中选取某首 → 按序号获取 LRC 歌词，瀑布流展示；与 QQ Music 歌词共用同一套交互（时间开关、TXT 下载、复制、LRC/QRC/KSC 格式）；酷狗接口不返回封面，结果卡片以音符占位 |
+
 ### 🖼️ 图片工具
 
 | 工具 | 说明 |
@@ -103,9 +114,11 @@ npx serve .
 ├── assets/
 │   └── logo.png                 # 站点图标 / favicon
 ├── css/
-│   └── style.css                # 全局样式 + 通用工具组件样式
+│   ├── style.css                # 全局样式 + 通用工具组件样式
+│   └── motion.css               # 交互动效层：微交互 / 转场 / 反馈 / 质感
 └── js/
     ├── app.js                   # 应用主入口：分类导航、工具切换、渲染调度
+    ├── motion.js                # 交互动效层：水波纹 / 数字滚动 / 指示条 / 主题
     ├── click-effect.js          # 全局鼠标点击特效（原生实现，可开关）
     └── tools/                   # 各工具模块，一个文件一个工具
         ├── shared.js            # 共用小工具：复制文本、轻提示
@@ -128,7 +141,11 @@ npx serve .
         ├── random-generator.js
         ├── color-picker.js
         ├── icon-tool.js         # 图标处理外壳（页内竖直子菜单）
-        └── icon-arrange.js      # 图标处理 · 图标排列子功能
+        ├── icon-arrange.js      # 图标处理 · 图标排列子功能
+        ├── music-tool.js        # 音乐音频外壳（页内竖直子菜单）
+        └── qqmusic-lyric.js     # 音乐音频 · QQ Music 歌词子功能
+        └── kugou-lyric.js       # 音乐音频 · 酷狗歌词子功能
+        └── music-tool.js        # 音乐音频外壳（页内竖直子菜单）
 ```
 
 ---
@@ -154,6 +171,34 @@ npx serve .
 | `skipFormFields` | 是否在表单元素内跳过，设 `false` 则全页面都触发 |
 
 > 改动 `duration` 时，需同步修改 `css/style.css` 中 `.click-effect-item` 的 `animation-duration`。
+
+---
+
+## 交互动效层
+
+动效全部集中在 `css/motion.css` + `js/motion.js`，**与业务样式解耦**，删掉这两个文件即可回到朴素版本。强度档位：克制（位移 2px、时长 120–260ms、缓动带轻微超调）。
+
+| 层次 | 内容 |
+|------|------|
+| 微交互 | 按钮 hover 抬升 / active 回弹（`cubic-bezier(.34,1.4,.64,1)`）、点击水波纹、输入框焦点光环、导航图标 hover 微动、滑块 thumb 放大 |
+| 转场入场 | 工具切换淡入上移、导航**滑动指示条**、卡片错峰入场（间隔 40ms）、首屏三段依次入场 |
+| 数据反馈 | 结果数字滚动（含实时输入豁免）、复制按钮打勾闪光、校验失败抖动（`DaibaoMotion.shake`）、统计卡 3D 倾斜（±4°） |
+| 质感氛围 | 顶栏毛玻璃 + 滚动加深阴影、跟随光标柔光、**深色模式**、自定义滚动条 |
+
+### 深色模式
+
+顶部 🌙 按钮切换，状态存 localStorage。实现方式是**只覆盖 CSS 变量**（`html[data-theme='dark']`），不改动任何结构，因此新增工具自动适配。为防刷新闪白，`index.html` 的 `<head>` 里有一段同步脚本，在内容渲染前就打上 `data-theme`。
+
+### 几个实现约定
+
+- **只动 `transform` / `opacity`**，不碰尺寸类属性，避免触发重排
+- **`prefers-reduced-motion` 全量降级**：系统开启「减少动态效果」时所有动画自动关闭
+- 工具内容由 `app.js` 动态重建，所有增强统一走 `DaibaoMotion.onContentChange(container)` 重新挂载
+- 数字滚动会判断变化频率：间隔小于 160ms 视为实时输入（如字数统计），跳过动画，避免打字时数字乱跳
+
+### 关掉动效
+
+删除 `index.html` 里 `css/motion.css` 与 `js/motion.js` 两行即可，`app.js` 中的钩子已做存在性判断，不会报错。
 
 ---
 
