@@ -75,6 +75,9 @@ const categories = [
     icon: '🧩',
     tools: [
       { key: 'fun-calc-tool', name: '趣味测算', factory: DaibaoTools.createFunCalcTool },
+      { key: 'hotnews-tool', name: '热点资讯', factory: DaibaoTools.createHotNewsTool },
+      { key: 'leisure-tool', name: '休闲娱乐', factory: DaibaoTools.createLeisureTool },
+      { key: 'gallery-tool', name: '图册表情', factory: DaibaoTools.createGalleryTool },
     ],
   },
 ];

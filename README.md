@@ -40,9 +40,9 @@ npx serve .
 
 ## 功能一览
 
-共 **7 个分类、22 个工具**，顶部导航切换分类、二级导航切换工具，部分工具内含页内三级子菜单，全程无刷新。
+共 **7 个分类、25 个工具**，顶部导航切换分类、二级导航切换工具，部分工具内含页内三级子菜单，全程无刷新。
 
-> 📌 **联网说明**：除纯本地工具外，以下工具需访问第三方接口 [OIAPI](https://www.oiapi.net)：**歌词下载**（QQ Music 歌词、酷狗歌词）、**在线音乐**（咪咕音乐、酷我音乐、网易云音乐）与**趣味测算**（你是小猪、五行穿衣、答案之书、塔罗牌）。这些接口已开启跨域（`Access-Control-Allow-Origin: *`），双击 `index.html`（`file://`）直接调用也正常，无需本地服务器。
+> 📌 **联网说明**：除纯本地工具外，以下工具需访问第三方接口 [OIAPI](https://www.oiapi.net)：**歌词下载**（QQ Music 歌词、酷狗歌词）、**在线音乐**（咪咕音乐、酷我音乐、网易云音乐）、**趣味测算**（你是小猪、五行穿衣、答案之书、塔罗牌）、**热点资讯**（历史上的今天、头条 / 抖音 / 微博 / 知乎热搜、澎湃新闻）、**休闲娱乐**（漂流瓶）、**图册表情**（王者英雄、小米壁纸、360壁纸、Loveanimer壁纸、Pximg、米游社原神COS）。这些接口已开启跨域（`Access-Control-Allow-Origin: *`），双击 `index.html`（`file://`）直接调用也正常，无需本地服务器。
 
 ### 💰 财务工具
 
@@ -115,6 +115,38 @@ npx serve .
 |------|------|
 | **趣味测算** | 二级工具，页内子菜单含四个趣味占卜：**你是小猪**（RollPig 接口随机趣味答案 + 分析）、**五行穿衣**（每日五行与宜忌穿衣颜色建议）、**答案之书**（翻牌给出一个答案，中英文）、**塔罗牌**（四张牌阵：过去 / 问题局面 / 解决方法 / 切牌，含正逆位与牌面解读）。均通过 [OIAPI](https://www.oiapi.net) 获取数据 |
 
+**热点资讯**（页内子菜单：历史上的今天 / 头条热搜 / 抖音热搜 / 微博热搜 / 知乎热搜 / 澎湃新闻）
+
+通过 [OIAPI](https://www.oiapi.net) 实时抓取各平台热榜，进入即自动加载，支持「刷新」与「加载更多」翻页，文案经 `textContent` 渲染防注入。
+
+| 工具 | 说明 |
+|------|------|
+| **历史上的今天** | 通过 [OIAPI](https://www.oiapi.net/doc/id/155.html) 获取当日历史事件、名人诞辰、逝者与节日，含焦点事件与分栏列表 |
+| **头条热搜** | 通过 [OIAPI](https://www.oiapi.net/doc/id/131.html) 的 TouTiao 接口获取头条热搜榜（含热度与封面） |
+| **抖音热搜** | 通过 [OIAPI](https://www.oiapi.net/doc/id/132.html) 的 DouYinHot 接口获取抖音热搜榜（仅标题，无外链） |
+| **微博热搜** | 通过 [OIAPI](https://www.oiapi.net/doc/id/133.html) 的 WeiBoHot 接口获取微博热搜榜（含外链） |
+| **知乎热搜** | 通过 [OIAPI](https://www.oiapi.net/doc/id/134.html) 的 ZhiHuHot 接口获取知乎热搜榜（仅标题，无外链） |
+| **澎湃新闻** | 通过 [OIAPI](https://www.oiapi.net/doc/id/117.html) 的 HotNews 接口获取澎湃新闻热榜（含标题、外链、封面与发布时间） |
+
+**休闲娱乐**（页内子菜单：漂流瓶）
+
+| 工具 | 说明 |
+|------|------|
+| **漂流瓶** | 通过 [OIAPI](https://www.oiapi.net/doc/id/128.html) 的 DriftBottle 接口随机捞取一个他人投放的漂流瓶（昵称 + 内容 + 时间 + 回复），支持「捞一个」与「再捞一个」。接口的 send / reply 为服务端空操作（返回他人随机瓶），故仅做随机读取，不伪造投放 |
+
+**图册表情**（页内子菜单：王者英雄 / 小米壁纸 / 360壁纸 / Loveanimer壁纸 / Pximg / 米游社原神COS）
+
+壁纸与图集类工具，图片经第三方图床直链加载（部分图床有防盗链限制，见「已知限制」）；卡片点击均弹灯箱看大图（灯箱挂载于 `document.body`，规避动效层 `transform` 导致的 `fixed` 定位偏移）。
+
+| 工具 | 说明 |
+|------|------|
+| **王者英雄** | 通过 [OIAPI](https://www.oiapi.net/doc/id/66.html) 的 Honor 接口展示单个英雄资料：定位 / 分路 / 技能 / 皮肤 / 背景故事 / 台词 |
+| **小米壁纸** | 通过 [OIAPI](https://www.oiapi.net/doc/id/96.html) 的 XiaoMiWallpaper 接口，按 17 个分类（热销榜 / 新品榜 / 游戏 / 风景 …）浏览壁纸，瀑布流 + 灯箱预览；其中「热门IP」「系统壁纸」上游返回 `-500`，已优雅跳过 |
+| **360壁纸** | 通过 [OIAPI](https://www.oiapi.net/doc/id/67.html) 的 Wallpaper360 接口，16 个分类（4K专区 / 美女模特 / 风景 / 动漫 …）+ 瀑布流 + 灯箱 |
+| **Loveanimer壁纸** | 通过 [OIAPI](https://www.oiapi.net/doc/id/41.html) 的 Loveanimer 接口，竖屏 / 横屏 + 14 类动漫壁纸；「美女」「动漫」两类上游 `-2` 失效（加 `n` 也救不回），已优雅提示「上游可能暂时下线」；视频类 CDN 实测 502 故仅做图片 |
+| **Pximg** | 通过 [OIAPI](https://www.oiapi.net/doc/id/22.html) 的 Pximg 接口随机获取 Pixiv 作品，**默认不显示内容，需勾选「可能存在 R18 内容，请确认后再查询」后才可手动查询**，点击「查询一张」拉取一张随机作品（R18 作品显示红色徽标） |
+| **米游社原神COS** | 通过 [OIAPI](https://www.oiapi.net/doc/id/148.html) 的 MihoyoCos 接口展示米游社原神 COS 信息流（作者头像 / 昵称 / 相对时间 / 标题 / 正文 / 多图），点击图片灯箱预览 |
+
 ---
 
 ## 目录结构
@@ -135,8 +167,10 @@ npx serve .
     ├── click-effect.js          # 全局鼠标点击特效（原生实现，可开关）
     └── tools/                   # 各工具模块，一个文件一个工具
         ├── shared.js            # 共用小工具：复制文本、轻提示
+        # 财务工具
         ├── vat-calculator.js
         ├── tax-calculator.js
+        # 开发工具
         ├── json-formatter.js
         ├── base64-tool.js
         ├── timestamp-tool.js
@@ -144,21 +178,53 @@ npx serve .
         ├── url-codec.js
         ├── jwt-parser.js
         ├── text-diff.js
+        # 办公工具
         ├── word-count.js
         ├── case-convert.js
         ├── text-process.js
         ├── password-generator.js
+        # 生活工具
         ├── date-calculator.js
         ├── bmi-calculator.js
         ├── unit-converter.js
         ├── random-generator.js
         ├── color-picker.js
+        # 图片工具
         ├── icon-tool.js         # 图标处理外壳（页内竖直子菜单）
         ├── icon-arrange.js      # 图标处理 · 图标排列子功能
-        ├── music-tool.js        # 音乐音频外壳（页内竖直子菜单）
-        └── qqmusic-lyric.js     # 音乐音频 · QQ Music 歌词子功能
-        └── kugou-lyric.js       # 音乐音频 · 酷狗歌词子功能
-        └── music-tool.js        # 音乐音频外壳（页内竖直子菜单）
+        # 音乐音频
+        ├── music-tool.js        # 音乐音频外壳 · 歌词下载
+        ├── qqmusic-lyric.js     # 歌词下载 · QQ Music 歌词
+        ├── kugou-lyric.js       # 歌词下载 · 酷狗歌词
+        ├── online-music-tool.js # 在线音乐外壳
+        ├── migumusic.js         # 在线音乐 · 咪咕音乐
+        ├── kuwo-music.js        # 在线音乐 · 酷我音乐
+        ├── netease-music.js     # 在线音乐 · 网易云音乐
+        # 其他分类 · 趣味测算
+        ├── fun-calc-tool.js     # 趣味测算外壳
+        ├── roll-pig.js          # 你是小猪
+        ├── five-element-dressing.js # 五行穿衣
+        ├── answer-book.js       # 答案之书
+        ├── tarot.js             # 塔罗牌
+        # 其他分类 · 热点资讯
+        ├── hotnews-tool.js      # 热点资讯外壳
+        ├── history-today.js     # 历史上的今天
+        ├── toutiao-hotsearch.js # 头条热搜
+        ├── douyin-hotsearch.js  # 抖音热搜
+        ├── weibo-hotsearch.js   # 微博热搜
+        ├── zhihu-hotsearch.js   # 知乎热搜
+        ├── penpai-news.js       # 澎湃新闻
+        # 其他分类 · 休闲娱乐
+        ├── leisure-tool.js      # 休闲娱乐外壳
+        ├── drift-bottle.js      # 漂流瓶
+        # 其他分类 · 图册表情
+        ├── gallery-tool.js      # 图册表情外壳
+        ├── wangzhe-hero.js      # 王者英雄
+        ├── xiaomi-wallpaper.js  # 小米壁纸
+        ├── wallpaper360.js      # 360壁纸
+        ├── loveanimer-wallpaper.js # Loveanimer壁纸
+        ├── pximg-wallpaper.js   # Pximg
+        └── genshin-cos.js       # 米游社原神COS
 ```
 
 ---
@@ -318,12 +384,13 @@ window.DaibaoTools.createMyTool = function (container) {
 - **JWT 解析不校验签名**。验签需要密钥，且不应该在前端进行。页面展示的一切内容都只是 Token 中**声称**的信息，不能作为身份或授权的判断依据。
 - **文本对比**使用 LCS 动态规划，单侧超过 2000 行时仅比对前 2000 行。
 - **个税计算器**结果为估算值，大病医疗等按年度汇算的扣除项不在月度预扣中体现，实际以税务机关汇算清缴为准。
+- **壁纸 / 图集类工具依赖第三方图床**，且需联网。当前内置的小米壁纸（`ts.market.mi-img.com`）、360壁纸（`pN.qhimg.com`）、Loveanimer（`cdn.pixabay.com`）、Pximg（`i.pixiv.re`）、米游社原神COS（`upload-bbs.miyoushe.com`）图床均可正常加载；若某图床启用 Referer 防盗链（如早期 Cosplay 模块的 `wa.lmgmi.com` 仅放行自身 Referer），浏览器 `<img>` 无法伪造 Referer，图片会加载失败，该模块已移除。
 
 ---
 
 ## 隐私
 
-绝大多数工具的计算均在浏览器本地完成，**不上传任何本地数据，不使用 Cookie 或本地追踪**。仅「歌词下载 / 在线音乐 / 趣味测算」部分工具会向第三方接口 [OIAPI](https://www.oiapi.net) 发起只读 GET 请求以获取歌词或内容，请求仅携带检索关键词、不上传你的任何文件或隐私数据。其余工具断网状态下同样可以正常使用。
+绝大多数工具的计算均在浏览器本地完成，**不上传任何本地数据，不使用 Cookie 或本地追踪**。仅「歌词下载 / 在线音乐 / 趣味测算 / 热点资讯 / 休闲娱乐 / 图册表情」部分工具会向第三方接口 [OIAPI](https://www.oiapi.net) 发起只读 GET 请求以获取内容，请求仅携带检索关键词、不上传你的任何文件或隐私数据。其余工具断网状态下同样可以正常使用。
 
 ---
 
