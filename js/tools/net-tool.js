@@ -1,22 +1,17 @@
-/* 图册表情：二级菜单外壳，页内左侧竖直菜单为三级菜单（当前：王者英雄） */
+/* 网络工具：开发工具 L2 外壳，页内左侧竖直菜单为三级菜单（当前：SSL证书检测） */
 window.DaibaoTools = window.DaibaoTools || {};
 
-window.DaibaoTools.createGalleryTool = function (container) {
-  // 三级菜单注册表：后续新增图册表情相关子功能在这里加一条即可
+window.DaibaoTools.createNetTool = function (container) {
+  // 三级菜单注册表：后续新增网络相关子功能在这里加一条即可
   var subTools = [
-    { key: 'emoticon-search', name: '表情包搜索', render: DaibaoTools.createEmoticonSearch },
-    { key: 'wangzhe-hero', name: '王者英雄', render: DaibaoTools.createWangZheHero },
-    { key: 'xiaomi-wallpaper', name: '小米壁纸', render: DaibaoTools.createXiaoMiWallpaper },
-    { key: 'wallpaper360', name: '360壁纸', render: DaibaoTools.createWallpaper360 },
-    { key: 'loveanimer-wallpaper', name: 'Loveanimer壁纸', render: DaibaoTools.createLoveanimerWallpaper },
-    { key: 'pximg-wallpaper', name: 'Pximg', render: DaibaoTools.createPximgWallpaper },
-    { key: 'genshin-cos', name: '米游社原神COS', render: DaibaoTools.createGenshinCos },
+    { key: 'ssl-check', name: 'SSL证书检测', render: DaibaoTools.createSslCheck },
+    { key: 'ip-location', name: 'IP定位', render: DaibaoTools.createIpLocation },
   ];
 
   container.innerHTML = `
     <div class="it-layout">
       <aside class="it-menu">
-        <div class="it-menu-title">图册表情</div>
+        <div class="it-menu-title">网络工具</div>
         <ul class="it-menu-list">
           ${subTools
             .map(
@@ -27,10 +22,10 @@ window.DaibaoTools.createGalleryTool = function (container) {
             .join('')}
         </ul>
       </aside>
-      <section class="it-content" id="glContent"></section>
+      <section class="it-content" id="netContent"></section>
     </div>`;
 
-  var content = container.querySelector('#glContent');
+  var content = container.querySelector('#netContent');
   var items = container.querySelectorAll('.it-menu-item');
 
   function activate(key) {

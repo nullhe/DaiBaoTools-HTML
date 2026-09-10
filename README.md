@@ -40,9 +40,9 @@ npx serve .
 
 ## 功能一览
 
-共 **7 个分类、25 个工具**，顶部导航切换分类、二级导航切换工具，部分工具内含页内三级子菜单，全程无刷新。
+共 **8 个分类、33 个工具**，顶部导航切换分类、二级导航切换工具，部分工具内含页内三级子菜单，全程无刷新。
 
-> 📌 **联网说明**：除纯本地工具外，以下工具需访问第三方接口 [OIAPI](https://www.oiapi.net)：**歌词下载**（QQ Music 歌词、酷狗歌词）、**在线音乐**（咪咕音乐、酷我音乐、网易云音乐）、**趣味测算**（你是小猪、五行穿衣、答案之书、塔罗牌）、**热点资讯**（历史上的今天、头条 / 抖音 / 微博 / 知乎热搜、澎湃新闻）、**休闲娱乐**（漂流瓶）、**图册表情**（王者英雄、小米壁纸、360壁纸、Loveanimer壁纸、Pximg、米游社原神COS）。这些接口已开启跨域（`Access-Control-Allow-Origin: *`），双击 `index.html`（`file://`）直接调用也正常，无需本地服务器。
+> 📌 **联网说明**：除纯本地工具外，以下工具需访问第三方接口 [OIAPI](https://www.oiapi.net)：**歌词下载**（QQ Music 歌词、酷狗歌词）、**在线音乐**（咪咕音乐、酷我音乐、网易云音乐）、**趣味测算**（你是小猪、五行穿衣、答案之书、塔罗牌）、**热点资讯**（历史上的今天、头条 / 抖音 / 微博 / 知乎热搜、澎湃新闻）、**休闲娱乐**（漂流瓶、Epic 免费游戏）、**图册表情**（表情包搜索、王者英雄、小米壁纸、360壁纸、Loveanimer壁纸、Pximg、米游社原神COS）、**网络工具**（SSL证书检测、IP定位）、**学习资料**（随机英文单词、名言警句、古诗词名句、每日一句、爱情公寓语录、情话、发病语录、一言）、**信息查询**（QQ 账号查询，需自备 OIAPI apikey）、**图片工具**（二维码生成 / 解析）、**生活工具**（摩斯电码、垃圾分类查询、天气查询）。这些接口已开启跨域（`Access-Control-Allow-Origin: *`），双击 `index.html`（`file://`）直接调用也正常，无需本地服务器。
 
 ### 💰 财务工具
 
@@ -63,6 +63,13 @@ npx serve .
 | **JWT 解析** | 解码 Header / Payload，标准声明（`iss`/`sub`/`aud`/`exp`/`iat`/`nbf`/`jti`）转本地时间，有效期状态判断 |
 | **文本对比** | 逐行 LCS 差异比对，并排高亮新增 / 删除 / 修改，支持忽略空白 / 大小写 / 空行，「仅显示差异」开关，可导出差异报告 |
 
+**网络工具**（页内子菜单：SSL证书检测 / IP定位）
+
+| 工具 | 说明 |
+|------|------|
+| **SSL证书检测** | 通过 [OIAPI](https://www.oiapi.net/doc/id/147.html) 的 CsrSSL 接口查询域名 HTTPS 证书，展示颁发机构、主体、生效 / 过期时间、剩余天数（着色告警）等，支持自定义端口 |
+| **IP定位** | 通过 [OIAPI](https://www.oiapi.net/doc/id/112.html) 的 Ip 接口查询 IPv4 的归属地、国家 / 省份 / 城市、运营商 / 机构与所在时区，含 IPv4 格式校验 |
+
 ### 📄 办公工具
 
 | 工具 | 说明 |
@@ -81,12 +88,16 @@ npx serve .
 | **单位换算** | 长度、质量、面积、体积、温度、速度、时间、数据存储、功率共 9 大类双向实时换算；数据存储同时提供 1024 与 1000 两套进制；温度为非线性换算，单独处理 |
 | **随机数生成** | 使用 `crypto.getRandomValues`（优于 `Math.random`），支持整数 / 小数、指定范围、是否去重 |
 | **颜色选择器** | HEX / RGB / HSL 三向实时同步，取色与一键复制 |
+| **摩斯电码** | 通过 [OIAPI](https://www.oiapi.net/doc/id/138.html) 的 Morse 接口完成文本 ⇄ 摩斯电码互转，编码支持中英文，解码字母 / 单词间用 `/` 分隔（粘贴空格会自动转换） |
+| **垃圾分类** | 通过 [OIAPI](https://www.oiapi.net/doc/id/64.html) 的 WasteSorting 接口查询垃圾所属类别（可回收 / 有害 / 湿 / 干 / 大件垃圾），返回「最佳匹配」与「更多可能」候选，点击候选可精确查询 |
+| **天气查询** | 通过 [OIAPI](https://www.oiapi.net/doc/id/40.html) 的 weather 接口查询国内地区天气：实时温度 / 高低温 / 天气状况 / 风向风速 / 湿度 / 能见度 / 更新时间，空气质量按国标 AQI 分级着色（优 → 严重污染）；有气象预警时红色横幅提示；附 30 项生活指数（穿衣 / 紫外线 / 晨练 …），默认显示 8 项可展开全部；提供 10 个热门城市快捷 chip，并记住上次查询的城市（仅存本机 localStorage） |
 
 ### 🖼️ 图片工具
 
 | 工具 | 说明 |
 |------|------|
-| **图标处理** | 功能页内含左侧竖直子菜单，子功能可扩展注册。当前包含**图标排列**：批量选择本地图片（支持拖入），自动排列成图标墙；每行个数、行数（固定 / 自动）、卡片间距、圆角、图标留白、适配方式（contain / cover）均可调，支持分批追加与单张移除 |
+| **图标处理** | 功能页内含左侧竖直子菜单，子功能可扩展注册。当前包含**图标排列**：批量选择本地图片（支持拖入），自动排列成图标墙；每行个数、行数（固定 / 自动）、卡片间距、圆角、图标留白、适配方式（contain / cover）均可调，支持分批追加与单张移除；**获取网站ico**：输入网址，调用 [OIAPI](https://www.oiapi.net/doc/id/46.html) WebInfo 接口获取网站标题 / 简介 / favicon，预览图标并提供 ICO 地址复制（接口返回的 icon 偶为非图片资源时自动回退并显示原链接） |
+| **二维码** | 二级工具，页内子菜单含**二维码工具**：①生成——输入文本 / 网址，可选尺寸（1-2000）、纠错级别（L/M/Q/H）、格式（PNG/JPEG），调用 [OIAPI](https://www.oiapi.net/doc/id/68.html) QRcode/encode 生成并展示二维码；②解析——输入公网可访问的二维码图片链接，调用 QRcode/decode 在服务端识别并返回内容（含复制按钮）。接口免 key、已开跨域 |
 
 ### 🎵 音乐音频
 
@@ -109,6 +120,30 @@ npx serve .
 | **酷我音乐** | 通过 [OIAPI](https://www.oiapi.net/doc/id/79.html) 搜索并播放，支持多档音质切换（无损 / 高品 / 标准），封面支持下载 |
 | **网易云音乐** | 通过 [OIAPI](https://www.oiapi.net/doc/id/8.html) 搜索并播放，提供单一音质直链（接口不返回音质列表） |
 
+### 📚 学习资料
+
+**英语学习**（页内子菜单：随机英文单词）
+
+| 工具 | 说明 |
+|------|------|
+| **随机英文单词** | 通过 [OIAPI](https://www.oiapi.net/doc/id/109.html) 的 RandEnglishDict 接口每次随机返回一个英文单词，含中文释义与例句（英文 + 中文翻译），支持「换一个」连续刷词 |
+
+**语言文学**（页内子菜单：名言警句 / 古诗词名句 / 每日一句 / 爱情公寓语录 / 情话 / 发病语录 / 一言）
+
+| 工具 | 说明 |
+|------|------|
+| **名言警句** | 通过 [OIAPI](https://www.oiapi.net/doc/id/33.html) 的 Saying 接口每次随机返回一句名言，含正文、出处（`—— 作者《作品》`）与日期，并展示接口附带的配图（加载失败自动隐藏不留白）；支持「换一句」连续抽取与「复制」（正文 + 出处）。接口配图为 `http://`，代码统一升级为 `https://` 以避免混合内容拦截 |
+| **古诗词名句** | 通过 [OIAPI](https://www.oiapi.net/doc/id/32.html) 的 Sentences 接口随机返回一句古诗词名句，附作者与篇目（`—— 王安石《桂枝香·登临送目》`），支持「换一句」与「复制」 |
+| **每日一句** | 通过 [OIAPI](https://www.oiapi.net/doc/id/31.html) 的 Daily 接口获取金山词霸每日一句：英文 + 中文对照、配图、**朗读音频（可直接播放）**；支持按日期查询、随机一天、查今日（非法日期接口自动回落今日） |
+| **爱情公寓语录** | 通过 [OIAPI](https://www.oiapi.net/doc/id/29.html) 的 iPartmentWord 接口随机返回一句《爱情公寓》台词，**自动按「——」拆出说话角色** |
+| **情话** | 通过 [OIAPI](https://www.oiapi.net/doc/id/24.html) 的 LoveTalk 接口随机返回一句情话（含「——」时自动拆出出处） |
+| **发病语录** | 通过 [OIAPI](https://www.oiapi.net/doc/id/2.html) 的 SickL 接口随机返回一句「发病」语录 |
+| **一言** | 通过 [OIAPI](https://www.oiapi.net/doc/id/1.html) 的 AWord 接口随机返回一条「一言」，含正文、出处、日期与配图 |
+
+> 💡 上述后 6 个工具（古诗词名句 / 每日一句 / 爱情公寓语录 / 情话 / 发病语录 / 一言）接口形态一致（随机一句 + 可选出处 / 配图），
+> 实现上**共用同一个渲染内核** `js/tools/quotes.js`，各自只声明「取数 URL + 解析规则」，避免 6 份重复代码；
+> 对外仍按项目约定暴露独立的 `DaibaoTools.createXxx(container)` 工厂函数。
+
 ### 🧩 其他分类
 
 | 工具 | 说明 |
@@ -128,24 +163,32 @@ npx serve .
 | **知乎热搜** | 通过 [OIAPI](https://www.oiapi.net/doc/id/134.html) 的 ZhiHuHot 接口获取知乎热搜榜（仅标题，无外链） |
 | **澎湃新闻** | 通过 [OIAPI](https://www.oiapi.net/doc/id/117.html) 的 HotNews 接口获取澎湃新闻热榜（含标题、外链、封面与发布时间） |
 
-**休闲娱乐**（页内子菜单：漂流瓶）
+**休闲娱乐**（页内子菜单：漂流瓶 / Epic 免费游戏）
 
 | 工具 | 说明 |
 |------|------|
 | **漂流瓶** | 通过 [OIAPI](https://www.oiapi.net/doc/id/128.html) 的 DriftBottle 接口随机捞取一个他人投放的漂流瓶（昵称 + 内容 + 时间 + 回复），支持「捞一个」与「再捞一个」。接口的 send / reply 为服务端空操作（返回他人随机瓶），故仅做随机读取，不伪造投放 |
+| **Epic 免费游戏** | 通过 [OIAPI](https://www.oiapi.net/doc/id/136.html) 的 EpicFree 接口获取 Epic 商城周免游戏清单（标题、厂商、简介、免费起止时间），自动按「当前免费」优先排序，标注状态徽标，支持「刷新列表」 |
 
-**图册表情**（页内子菜单：王者英雄 / 小米壁纸 / 360壁纸 / Loveanimer壁纸 / Pximg / 米游社原神COS）
+**图册表情**（页内子菜单：表情包搜索 / 王者英雄 / 小米壁纸 / 360壁纸 / Loveanimer壁纸 / Pximg / 米游社原神COS）
 
 壁纸与图集类工具，图片经第三方图床直链加载（部分图床有防盗链限制，见「已知限制」）；卡片点击均弹灯箱看大图（灯箱挂载于 `document.body`，规避动效层 `transform` 导致的 `fixed` 定位偏移）。
 
 | 工具 | 说明 |
 |------|------|
+| **表情包搜索** | 通过 [OIAPI](https://www.oiapi.net/doc/id/43.html) 的 EmoticonPack 接口（QQ 输入框同款）检索表情包：输入关键词搜索，**留空则随机抽取热门表情包**；可选每页 20 / 40 / 60 / 100 张，支持「加载更多」翻页（按 url 去重）；网格缩略图右下角标注 GIF / JPG / PNG 类型，点击弹灯箱看大图，灯箱内可**「找相似」**（用图片 `id` 调相似接口）、复制链接、新标签打开 |
 | **王者英雄** | 通过 [OIAPI](https://www.oiapi.net/doc/id/66.html) 的 Honor 接口展示单个英雄资料：定位 / 分路 / 技能 / 皮肤 / 背景故事 / 台词 |
 | **小米壁纸** | 通过 [OIAPI](https://www.oiapi.net/doc/id/96.html) 的 XiaoMiWallpaper 接口，按 17 个分类（热销榜 / 新品榜 / 游戏 / 风景 …）浏览壁纸，瀑布流 + 灯箱预览；其中「热门IP」「系统壁纸」上游返回 `-500`，已优雅跳过 |
 | **360壁纸** | 通过 [OIAPI](https://www.oiapi.net/doc/id/67.html) 的 Wallpaper360 接口，16 个分类（4K专区 / 美女模特 / 风景 / 动漫 …）+ 瀑布流 + 灯箱 |
 | **Loveanimer壁纸** | 通过 [OIAPI](https://www.oiapi.net/doc/id/41.html) 的 Loveanimer 接口，竖屏 / 横屏 + 14 类动漫壁纸；「美女」「动漫」两类上游 `-2` 失效（加 `n` 也救不回），已优雅提示「上游可能暂时下线」；视频类 CDN 实测 502 故仅做图片 |
 | **Pximg** | 通过 [OIAPI](https://www.oiapi.net/doc/id/22.html) 的 Pximg 接口随机获取 Pixiv 作品，**默认不显示内容，需勾选「可能存在 R18 内容，请确认后再查询」后才可手动查询**，点击「查询一张」拉取一张随机作品（R18 作品显示红色徽标） |
 | **米游社原神COS** | 通过 [OIAPI](https://www.oiapi.net/doc/id/148.html) 的 MihoyoCos 接口展示米游社原神 COS 信息流（作者头像 / 昵称 / 相对时间 / 标题 / 正文 / 多图），点击图片灯箱预览 |
+
+**信息查询**（页内子菜单：QQ 账号查询）
+
+| 工具 | 说明 |
+|------|------|
+| **QQ 账号查询** | 通过 [OIAPI](https://www.oiapi.net/doc/id/77.html) 的 QQMemberInfo 接口查询 QQ 账号的昵称 / 性别 / 年龄 / 头像 / 注册时间 / 状态 / 个性签名。**该接口需使用 apikey 访问**，工具内提供 Key 输入框与「记住 Key」选项（仅存本机 localStorage，不上传第三方），可在 [OIAPI](https://www.oiapi.net) 加群免费获取 |
 
 ---
 
@@ -178,6 +221,9 @@ npx serve .
         ├── url-codec.js
         ├── jwt-parser.js
         ├── text-diff.js
+        ├── net-tool.js         # 网络工具外壳
+        ├── ssl-check.js        # SSL证书检测
+        ├── ip-location.js      # IP定位
         # 办公工具
         ├── word-count.js
         ├── case-convert.js
@@ -189,9 +235,17 @@ npx serve .
         ├── unit-converter.js
         ├── random-generator.js
         ├── color-picker.js
+        ├── morse-tool.js         # 摩斯电码外壳（页内竖直子菜单）
+        ├── morse.js              # 摩斯电码 · 文本 ⇄ 摩斯互转
+        ├── garbage-tool.js       # 垃圾分类外壳（页内竖直子菜单）
+        ├── garbage-sort.js       # 垃圾分类 · 查询垃圾所属类别
+        ├── weather-tool.js       # 天气查询外壳（页内竖直子菜单）
+        └── weather.js            # 天气查询 · 实时天气 / 空气 / 生活指数
         # 图片工具
         ├── icon-tool.js         # 图标处理外壳（页内竖直子菜单）
         ├── icon-arrange.js      # 图标处理 · 图标排列子功能
+        ├── qr-tool.js           # 二维码外壳（页内竖直子菜单）
+        └── qr-code.js           # 二维码工具 · 生成 / 解析
         # 音乐音频
         ├── music-tool.js        # 音乐音频外壳 · 歌词下载
         ├── qqmusic-lyric.js     # 歌词下载 · QQ Music 歌词
@@ -200,6 +254,13 @@ npx serve .
         ├── migumusic.js         # 在线音乐 · 咪咕音乐
         ├── kuwo-music.js        # 在线音乐 · 酷我音乐
         ├── netease-music.js     # 在线音乐 · 网易云音乐
+        # 学习资料 · 英语学习
+        ├── english-tool.js       # 英语学习外壳
+        ├── random-word.js        # 随机英文单词
+        # 学习资料 · 语言文学
+        ├── language-tool.js      # 语言文学外壳
+        ├── saying.js             # 名言警句
+        ├── quotes.js             # 语录家族共用内核 + 古诗词名句/每日一句/爱情公寓/情话/发病语录/一言
         # 其他分类 · 趣味测算
         ├── fun-calc-tool.js     # 趣味测算外壳
         ├── roll-pig.js          # 你是小猪
@@ -217,14 +278,19 @@ npx serve .
         # 其他分类 · 休闲娱乐
         ├── leisure-tool.js      # 休闲娱乐外壳
         ├── drift-bottle.js      # 漂流瓶
+        ├── epic-free.js         # Epic 免费游戏
         # 其他分类 · 图册表情
         ├── gallery-tool.js      # 图册表情外壳
+        ├── emoticon-search.js   # 表情包搜索
         ├── wangzhe-hero.js      # 王者英雄
         ├── xiaomi-wallpaper.js  # 小米壁纸
         ├── wallpaper360.js      # 360壁纸
         ├── loveanimer-wallpaper.js # Loveanimer壁纸
         ├── pximg-wallpaper.js   # Pximg
         └── genshin-cos.js       # 米游社原神COS
+        # 其他分类 · 信息查询
+        ├── info-query-tool.js   # 信息查询外壳
+        └── qq-query.js          # QQ 账号查询
 ```
 
 ---
@@ -384,13 +450,13 @@ window.DaibaoTools.createMyTool = function (container) {
 - **JWT 解析不校验签名**。验签需要密钥，且不应该在前端进行。页面展示的一切内容都只是 Token 中**声称**的信息，不能作为身份或授权的判断依据。
 - **文本对比**使用 LCS 动态规划，单侧超过 2000 行时仅比对前 2000 行。
 - **个税计算器**结果为估算值，大病医疗等按年度汇算的扣除项不在月度预扣中体现，实际以税务机关汇算清缴为准。
-- **壁纸 / 图集类工具依赖第三方图床**，且需联网。当前内置的小米壁纸（`ts.market.mi-img.com`）、360壁纸（`pN.qhimg.com`）、Loveanimer（`cdn.pixabay.com`）、Pximg（`i.pixiv.re`）、米游社原神COS（`upload-bbs.miyoushe.com`）图床均可正常加载；若某图床启用 Referer 防盗链（如早期 Cosplay 模块的 `wa.lmgmi.com` 仅放行自身 Referer），浏览器 `<img>` 无法伪造 Referer，图片会加载失败，该模块已移除。
+- **壁纸 / 图集类工具依赖第三方图床**，且需联网。当前内置的表情包搜索（`biaoqing.gtimg.com`）、小米壁纸（`ts.market.mi-img.com`）、360壁纸（`pN.qhimg.com`）、Loveanimer（`cdn.pixabay.com`）、Pximg（`i.pixiv.re`）、米游社原神COS（`upload-bbs.miyoushe.com`）图床均可正常加载；若某图床启用 Referer 防盗链（如早期 Cosplay 模块的 `wa.lmgmi.com` 仅放行自身 Referer），浏览器 `<img>` 无法伪造 Referer，图片会加载失败，该模块已移除。
 
 ---
 
 ## 隐私
 
-绝大多数工具的计算均在浏览器本地完成，**不上传任何本地数据，不使用 Cookie 或本地追踪**。仅「歌词下载 / 在线音乐 / 趣味测算 / 热点资讯 / 休闲娱乐 / 图册表情」部分工具会向第三方接口 [OIAPI](https://www.oiapi.net) 发起只读 GET 请求以获取内容，请求仅携带检索关键词、不上传你的任何文件或隐私数据。其余工具断网状态下同样可以正常使用。
+绝大多数工具的计算均在浏览器本地完成，**不上传任何本地数据，不使用 Cookie 或本地追踪**。仅「歌词下载 / 在线音乐 / 趣味测算 / 热点资讯 / 休闲娱乐 / 图册表情 / 信息查询（QQ 账号查询需附带用户自备的 apikey）」部分工具会向第三方接口 [OIAPI](https://www.oiapi.net) 发起只读 GET 请求以获取内容，请求仅携带检索关键词、不上传你的任何文件或隐私数据（QQ 账号查询的 apikey 仅用于本次请求拼接，并可选存于本机 localStorage，不会上传任何第三方）。其余工具断网状态下同样可以正常使用。
 
 ---
 

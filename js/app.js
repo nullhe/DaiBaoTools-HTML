@@ -13,6 +13,7 @@ const categories = [
     tools: [
       { key: 'vat-calculator', name: '增值税计算器', factory: DaibaoTools.createVatCalculator },
       { key: 'tax-calculator', name: '个税计算器', factory: DaibaoTools.createTaxCalculator },
+      { key: 'unit-converter', name: '单位换算', factory: DaibaoTools.createUnitConverter },
     ],
   },
   {
@@ -27,6 +28,7 @@ const categories = [
       { key: 'url-codec', name: 'URL 编解码', factory: DaibaoTools.createUrlCodec },
       { key: 'jwt-parser', name: 'JWT 解析', factory: DaibaoTools.createJwtParser },
       { key: 'text-diff', name: '文本对比', factory: DaibaoTools.createTextDiff },
+      { key: 'net-tool', name: '网络工具', factory: DaibaoTools.createNetTool },
     ],
   },
   {
@@ -47,9 +49,11 @@ const categories = [
     tools: [
       { key: 'date-calculator', name: '日期计算器', factory: DaibaoTools.createDateCalculator },
       { key: 'bmi', name: 'BMI 计算器', factory: DaibaoTools.createBmiCalculator },
-      { key: 'unit-converter', name: '单位换算', factory: DaibaoTools.createUnitConverter },
       { key: 'random', name: '随机数生成', factory: DaibaoTools.createRandomGenerator },
       { key: 'color-picker', name: '颜色选择器', factory: DaibaoTools.createColorPicker },
+      { key: 'morse-tool', name: '摩斯电码', factory: DaibaoTools.createMorseTool },
+      { key: 'garbage-tool', name: '垃圾分类', factory: DaibaoTools.createGarbageTool },
+      { key: 'weather-tool', name: '天气查询', factory: DaibaoTools.createWeatherTool },
     ],
   },
   {
@@ -58,6 +62,7 @@ const categories = [
     icon: '🖼️',
     tools: [
       { key: 'icon-tool', name: '图标处理', factory: DaibaoTools.createIconTool },
+      { key: 'qr-tool', name: '二维码', factory: DaibaoTools.createQrTool },
     ],
   },
   {
@@ -70,6 +75,15 @@ const categories = [
     ],
   },
   {
+    key: 'study',
+    name: '学习资料',
+    icon: '📚',
+    tools: [
+      { key: 'english-tool', name: '英语学习', factory: DaibaoTools.createEnglishTool },
+      { key: 'language-tool', name: '语言文学', factory: DaibaoTools.createLanguageTool },
+    ],
+  },
+  {
     key: 'other',
     name: '其他分类',
     icon: '🧩',
@@ -78,6 +92,7 @@ const categories = [
       { key: 'hotnews-tool', name: '热点资讯', factory: DaibaoTools.createHotNewsTool },
       { key: 'leisure-tool', name: '休闲娱乐', factory: DaibaoTools.createLeisureTool },
       { key: 'gallery-tool', name: '图册表情', factory: DaibaoTools.createGalleryTool },
+      { key: 'info-query-tool', name: '信息查询', factory: DaibaoTools.createInfoQueryTool },
     ],
   },
 ];

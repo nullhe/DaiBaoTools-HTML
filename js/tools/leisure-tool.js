@@ -5,6 +5,7 @@ window.DaibaoTools.createLeisureTool = function (container) {
   // 三级菜单注册表：后续新增休闲娱乐相关子功能在这里加一条即可
   var subTools = [
     { key: 'drift-bottle', name: '漂流瓶', render: DaibaoTools.createDriftBottle },
+    { key: 'epic-free', name: 'Epic 免费游戏', render: DaibaoTools.createEpicFree },
   ];
 
   container.innerHTML = `

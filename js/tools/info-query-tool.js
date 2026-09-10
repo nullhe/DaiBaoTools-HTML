@@ -1,22 +1,16 @@
-/* 图册表情：二级菜单外壳，页内左侧竖直菜单为三级菜单（当前：王者英雄） */
+/* 信息查询：其他分类 L2 外壳，页内左侧竖直菜单为三级菜单（当前：QQ账号查询） */
 window.DaibaoTools = window.DaibaoTools || {};
 
-window.DaibaoTools.createGalleryTool = function (container) {
-  // 三级菜单注册表：后续新增图册表情相关子功能在这里加一条即可
+window.DaibaoTools.createInfoQueryTool = function (container) {
+  // 三级菜单注册表：后续新增信息查询相关子功能在这里加一条即可
   var subTools = [
-    { key: 'emoticon-search', name: '表情包搜索', render: DaibaoTools.createEmoticonSearch },
-    { key: 'wangzhe-hero', name: '王者英雄', render: DaibaoTools.createWangZheHero },
-    { key: 'xiaomi-wallpaper', name: '小米壁纸', render: DaibaoTools.createXiaoMiWallpaper },
-    { key: 'wallpaper360', name: '360壁纸', render: DaibaoTools.createWallpaper360 },
-    { key: 'loveanimer-wallpaper', name: 'Loveanimer壁纸', render: DaibaoTools.createLoveanimerWallpaper },
-    { key: 'pximg-wallpaper', name: 'Pximg', render: DaibaoTools.createPximgWallpaper },
-    { key: 'genshin-cos', name: '米游社原神COS', render: DaibaoTools.createGenshinCos },
+    { key: 'qq-query', name: 'QQ账号查询', render: DaibaoTools.createQqQuery },
   ];
 
   container.innerHTML = `
     <div class="it-layout">
       <aside class="it-menu">
-        <div class="it-menu-title">图册表情</div>
+        <div class="it-menu-title">信息查询</div>
         <ul class="it-menu-list">
           ${subTools
             .map(
@@ -27,10 +21,10 @@ window.DaibaoTools.createGalleryTool = function (container) {
             .join('')}
         </ul>
       </aside>
-      <section class="it-content" id="glContent"></section>
+      <section class="it-content" id="iqContent"></section>
     </div>`;
 
-  var content = container.querySelector('#glContent');
+  var content = container.querySelector('#iqContent');
   var items = container.querySelectorAll('.it-menu-item');
 
   function activate(key) {

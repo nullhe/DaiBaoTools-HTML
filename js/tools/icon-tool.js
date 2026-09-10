@@ -5,6 +5,7 @@ window.DaibaoTools.createIconTool = function (container) {
   // 子功能注册表：后续新增子功能在这里加一条即可
   var subTools = [
     { key: 'arrange', name: '图标排列', render: DaibaoTools.createIconArrange },
+    { key: 'get-site-ico', name: '获取网站ico', render: DaibaoTools.createGetSiteIco },
   ];
 
   container.innerHTML = `
