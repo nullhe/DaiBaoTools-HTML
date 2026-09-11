@@ -42,7 +42,9 @@ npx serve .
 
 共 **8 个分类、33 个工具**，顶部导航切换分类、二级导航切换工具，部分工具内含页内三级子菜单，全程无刷新。
 
-> 📌 **联网说明**：除纯本地工具外，以下工具需访问第三方接口 [OIAPI](https://www.oiapi.net)：**歌词下载**（QQ Music 歌词、酷狗歌词）、**在线音乐**（咪咕音乐、酷我音乐、网易云音乐）、**趣味测算**（你是小猪、五行穿衣、答案之书、塔罗牌）、**热点资讯**（历史上的今天、头条 / 抖音 / 微博 / 知乎热搜、澎湃新闻）、**休闲娱乐**（漂流瓶、Epic 免费游戏）、**图册表情**（表情包搜索、王者英雄、小米壁纸、360壁纸、Loveanimer壁纸、Pximg、米游社原神COS）、**网络工具**（SSL证书检测、IP定位）、**学习资料**（随机英文单词、名言警句、古诗词名句、每日一句、爱情公寓语录、情话、发病语录、一言）、**信息查询**（QQ 账号查询，需自备 OIAPI apikey）、**图片工具**（二维码生成 / 解析）、**生活工具**（摩斯电码、垃圾分类查询、天气查询）。这些接口已开启跨域（`Access-Control-Allow-Origin: *`），双击 `index.html`（`file://`）直接调用也正常，无需本地服务器。
+> 📌 **联网说明**：除纯本地工具外，以下工具需访问第三方接口 [OIAPI](https://www.oiapi.net)：**歌词下载**（QQ Music 歌词、酷狗歌词）、**在线音乐**（咪咕音乐、酷我音乐、网易云音乐）、**趣味测算**（你是小猪、五行穿衣、答案之书、塔罗牌）、**热点资讯**（历史上的今天、头条 / 抖音 / 微博 / 知乎热搜、澎湃新闻）、**休闲娱乐**（漂流瓶、Epic 免费游戏）、**图册表情**（表情包搜索、王者英雄、小米壁纸、360壁纸、Loveanimer壁纸、Pximg、米游社原神COS、高清背景图）、**网络工具**（SSL证书检测、IP定位）、**学习资料**（随机英文单词、名言警句、古诗词名句、每日一句、爱情公寓语录、情话、发病语录、一言）、**信息查询**（QQ 账号查询，需自备 OIAPI apikey）、**图片工具**（二维码生成 / 解析）、**生活工具**（摩斯电码、垃圾分类查询、天气查询）。这些接口已开启跨域（`Access-Control-Allow-Origin: *`），双击 `index.html`（`file://`）直接调用也正常，无需本地服务器。
+
+> 其中**「高清背景图」**是唯一非 OIAPI 的接口，来自 [酷酷 API](https://api.zxki.cn/doc/gqbjt.html)，无需 apikey；但该接口 **302 跳转到 360 图床且响应无 CORS 头**，因此不能用 `fetch` 取图（会抛 `Failed to fetch`），改用 `<img>` 直连、由浏览器跟随跳转；同理图源未开放跨域权限，保存请用右键「图片另存为」。
 
 ### 💰 财务工具
 
@@ -170,7 +172,7 @@ npx serve .
 | **漂流瓶** | 通过 [OIAPI](https://www.oiapi.net/doc/id/128.html) 的 DriftBottle 接口随机捞取一个他人投放的漂流瓶（昵称 + 内容 + 时间 + 回复），支持「捞一个」与「再捞一个」。接口的 send / reply 为服务端空操作（返回他人随机瓶），故仅做随机读取，不伪造投放 |
 | **Epic 免费游戏** | 通过 [OIAPI](https://www.oiapi.net/doc/id/136.html) 的 EpicFree 接口获取 Epic 商城周免游戏清单（标题、厂商、简介、免费起止时间），自动按「当前免费」优先排序，标注状态徽标，支持「刷新列表」 |
 
-**图册表情**（页内子菜单：表情包搜索 / 王者英雄 / 小米壁纸 / 360壁纸 / Loveanimer壁纸 / Pximg / 米游社原神COS）
+**图册表情**（页内子菜单：表情包搜索 / 王者英雄 / 小米壁纸 / 360壁纸 / Loveanimer壁纸 / Pximg / 米游社原神COS / 高清背景图）
 
 壁纸与图集类工具，图片经第三方图床直链加载（部分图床有防盗链限制，见「已知限制」）；卡片点击均弹灯箱看大图（灯箱挂载于 `document.body`，规避动效层 `transform` 导致的 `fixed` 定位偏移）。
 
@@ -183,6 +185,7 @@ npx serve .
 | **Loveanimer壁纸** | 通过 [OIAPI](https://www.oiapi.net/doc/id/41.html) 的 Loveanimer 接口，竖屏 / 横屏 + 14 类动漫壁纸；「美女」「动漫」两类上游 `-2` 失效（加 `n` 也救不回），已优雅提示「上游可能暂时下线」；视频类 CDN 实测 502 故仅做图片 |
 | **Pximg** | 通过 [OIAPI](https://www.oiapi.net/doc/id/22.html) 的 Pximg 接口随机获取 Pixiv 作品，**默认不显示内容，需勾选「可能存在 R18 内容，请确认后再查询」后才可手动查询**，点击「查询一张」拉取一张随机作品（R18 作品显示红色徽标） |
 | **米游社原神COS** | 通过 [OIAPI](https://www.oiapi.net/doc/id/148.html) 的 MihoyoCos 接口展示米游社原神 COS 信息流（作者头像 / 昵称 / 相对时间 / 标题 / 正文 / 多图），点击图片灯箱预览 |
+| **高清背景图** | 通过 [酷酷 API](https://api.zxki.cn/doc/gqbjt.html) 的 gqbjt 接口获取 **1600×900** 高清壁纸，16 个分类（爱情 / 风景 / 清新 / 动漫 / 明星 / 萌宠 / 游戏 / 汽车 / 时尚 / 美女 / 日历 / 影视 / 军事 / 体育 / 萌娃 / 格言）切换，支持「换一张」随机换图、下载原图与新标签打开。**注意三点**：① 接口是 **302 跳转到 360 图床**（`http://p*.qhimg.com/bdm/1600_900_85/*.jpg`，图床同时支持 https），并非文档示例写的「返回图片 URL 字符串」；② 响应里**没有 CORS 头**，所以不能用 `fetch` 取图（浏览器会抛 `Failed to fetch`），必须由 `<img src>` 直连、让浏览器自己跟随跳转；③ 图源未开放跨域权限，canvas 会被污染，**「保存图片」按钮失败时会自动降级为新标签打开，请右键「图片另存为」**。每次换图仍追加 `&_t=` cache-buster 以穿透 CDN 缓存 |
 
 **信息查询**（页内子菜单：QQ 账号查询）
 
@@ -287,7 +290,8 @@ npx serve .
         ├── wallpaper360.js      # 360壁纸
         ├── loveanimer-wallpaper.js # Loveanimer壁纸
         ├── pximg-wallpaper.js   # Pximg
-        └── genshin-cos.js       # 米游社原神COS
+        ├── genshin-cos.js       # 米游社原神COS
+        └── hd-wallpaper.js      # 高清背景图（酷酷 API，非 OIAPI）
         # 其他分类 · 信息查询
         ├── info-query-tool.js   # 信息查询外壳
         └── qq-query.js          # QQ 账号查询
@@ -450,13 +454,13 @@ window.DaibaoTools.createMyTool = function (container) {
 - **JWT 解析不校验签名**。验签需要密钥，且不应该在前端进行。页面展示的一切内容都只是 Token 中**声称**的信息，不能作为身份或授权的判断依据。
 - **文本对比**使用 LCS 动态规划，单侧超过 2000 行时仅比对前 2000 行。
 - **个税计算器**结果为估算值，大病医疗等按年度汇算的扣除项不在月度预扣中体现，实际以税务机关汇算清缴为准。
-- **壁纸 / 图集类工具依赖第三方图床**，且需联网。当前内置的表情包搜索（`biaoqing.gtimg.com`）、小米壁纸（`ts.market.mi-img.com`）、360壁纸（`pN.qhimg.com`）、Loveanimer（`cdn.pixabay.com`）、Pximg（`i.pixiv.re`）、米游社原神COS（`upload-bbs.miyoushe.com`）图床均可正常加载；若某图床启用 Referer 防盗链（如早期 Cosplay 模块的 `wa.lmgmi.com` 仅放行自身 Referer），浏览器 `<img>` 无法伪造 Referer，图片会加载失败，该模块已移除。
+- **壁纸 / 图集类工具依赖第三方图床**，且需联网。当前内置的表情包搜索（`biaoqing.gtimg.com`）、小米壁纸（`ts.market.mi-img.com`）、360壁纸（`pN.qhimg.com`）、Loveanimer（`cdn.pixabay.com`）、Pximg（`i.pixiv.re`）、米游社原神COS（`upload-bbs.miyoushe.com`）、高清背景图（`api.zxki.cn` 302 跳转至 `p*.qhimg.com`）图床均可正常加载；若某图床启用 Referer 防盗链（如早期 Cosplay 模块的 `wa.lmgmi.com` 仅放行自身 Referer），浏览器 `<img>` 无法伪造 Referer，图片会加载失败，该模块已移除。
 
 ---
 
 ## 隐私
 
-绝大多数工具的计算均在浏览器本地完成，**不上传任何本地数据，不使用 Cookie 或本地追踪**。仅「歌词下载 / 在线音乐 / 趣味测算 / 热点资讯 / 休闲娱乐 / 图册表情 / 信息查询（QQ 账号查询需附带用户自备的 apikey）」部分工具会向第三方接口 [OIAPI](https://www.oiapi.net) 发起只读 GET 请求以获取内容，请求仅携带检索关键词、不上传你的任何文件或隐私数据（QQ 账号查询的 apikey 仅用于本次请求拼接，并可选存于本机 localStorage，不会上传任何第三方）。其余工具断网状态下同样可以正常使用。
+绝大多数工具的计算均在浏览器本地完成，**不上传任何本地数据，不使用 Cookie 或本地追踪**。仅「歌词下载 / 在线音乐 / 趣味测算 / 热点资讯 / 休闲娱乐 / 图册表情 / 信息查询（QQ 账号查询需附带用户自备的 apikey）」部分工具会向第三方接口 [OIAPI](https://www.oiapi.net)（以及图册表情下「高清背景图」使用的 [酷酷 API](https://api.zxki.cn)）发起只读 GET 请求以获取内容，请求仅携带检索关键词或分类名、不上传你的任何文件或隐私数据（QQ 账号查询的 apikey 仅用于本次请求拼接，并可选存于本机 localStorage，不会上传任何第三方）。其余工具断网状态下同样可以正常使用。
 
 ---
 

@@ -2801,6 +2801,65 @@ a.ppn-title:hover { color: #0a5bb5; text-decoration: underline; }
 [data-theme='dark'] .ems-cell { background: #0e141b; border-color: #2c3744; }
 [data-theme='dark'] .ems-cell-fallback { color: #9aa7b3; }
 
+/* 高清背景图（图册表情 L3，容器类复用 xmwp-*） */
+.hdw-select { flex: 0 0 auto; width: 132px; }
+.hdw-stage {
+  position: relative;
+  width: 100%;
+  min-height: 260px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg-page);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hdw-img { display: block; width: 100%; height: auto; max-height: 72vh; object-fit: contain; }
+.hdw-mask {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, .72);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.hdw-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: hdw-spin .8s linear infinite;
+}
+@keyframes hdw-spin { to { transform: rotate(360deg); } }
+.hdw-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.hdw-meta {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+}
+.hdw-open { text-decoration: none; }
+/* 防御：以下元素均由 hidden 属性控制显隐，且上方用了非默认 display，必须显式覆盖 */
+.hdw-img[hidden], .hdw-mask[hidden], .hdw-error[hidden], .hdw-meta[hidden], .hdw-open[hidden] { display: none; }
+[data-theme='dark'] .hdw-stage { background: #0e141b; border-color: #2c3744; }
+[data-theme='dark'] .hdw-mask { background: rgba(14, 20, 27, .78); }
+
 /* SSL 证书检测（网络工具 L3） */
 .ssl-tool { max-width: 980px; margin: 0 auto; }
 .ssl-header { margin-bottom: 14px; }

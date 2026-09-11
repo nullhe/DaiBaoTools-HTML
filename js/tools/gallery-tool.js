@@ -11,6 +11,7 @@ window.DaibaoTools.createGalleryTool = function (container) {
     { key: 'loveanimer-wallpaper', name: 'Loveanimer壁纸', render: DaibaoTools.createLoveanimerWallpaper },
     { key: 'pximg-wallpaper', name: 'Pximg', render: DaibaoTools.createPximgWallpaper },
     { key: 'genshin-cos', name: '米游社原神COS', render: DaibaoTools.createGenshinCos },
+    { key: 'hd-wallpaper', name: '高清背景图', render: DaibaoTools.createHdWallpaper },
   ];
 
   container.innerHTML = `
