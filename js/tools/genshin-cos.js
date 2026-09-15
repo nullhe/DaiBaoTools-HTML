@@ -1,28 +1,59 @@
-/* 米游社原神COS：浏览米游社社区原神 COS 作品，按时间线翻页（OIAPI / MihoyoCos） */
+/* 米游社原神COS：浏览米游社社区原神 COS 作品，手动翻页查看（OIAPI / MihoyoCos）
+ * 接口 https://www.oiapi.net/api/MihoyoCos?page=N&limit=M
+ *
+ * 三个实测要点（2026-09-11），改动前务必读完：
+ * 1. 响应带 `Access-Control-Allow-Origin: *`，免 key，可直接 fetch。
+ * 2. 只有 page / limit 两个参数，返回体里**没有总数、也没有是否末页字段**；
+ *    深页（如 page=100）返回的是 `code=1 + data:[]`（空数组，不是错误）。
+ *    所以「末页」只能靠 `data.length < limit` 判定，跳到空页要单独提示而不是报错。
+ * 3. 按需求：进入模块**默认不加载任何内容**，必须点「查询作品」才发请求；
+ *    列表上方与下方各放一组联动的分页控件。
+ */
 window.DaibaoTools = window.DaibaoTools || {};
 
 window.DaibaoTools.createGenshinCos = function (container) {
+  var LIMITS = [10, 20, 30];
+
+  var PAGER = `
+    <div class="gcos-pager">
+      <button class="tool-btn gcos-pgbtn" data-act="prev">上一页</button>
+      <span class="gcos-pgtext">第</span>
+      <input class="tool-input gcos-pginput" type="number" min="1" step="1" value="1" aria-label="页码" />
+      <span class="gcos-pgtext">页</span>
+      <button class="tool-btn gcos-pgbtn" data-act="next">下一页</button>
+      <span class="gcos-pgcount"></span>
+    </div>`;
+
+  // 同一份模板渲染上下两组分页控件，仅 id / 初始 hidden 不同
+  function pager(id) {
+    return PAGER.replace('<div class="gcos-pager">', '<div class="gcos-pager" id="' + id + '" hidden>');
+  }
+
   container.innerHTML = `
     <div class="xmwp-card">
       <div class="xmwp-head">
         <h2 class="xmwp-title">🎭 米游社原神COS</h2>
-        <p class="xmwp-sub">来自米游社社区的原神 COS 作品，按时间线浏览，点击任意图片查看大图</p>
+        <p class="xmwp-sub">来自米游社社区的原神 COS 作品，默认不加载内容，点击「查询作品」后按页浏览，点击任意图片查看大图</p>
       </div>
       <div class="xmwp-toolbar">
-        <button class="tool-btn" id="gcosRefresh">刷新</button>
-        <button class="tool-btn tool-btn-primary" id="gcosMore">加载更多</button>
+        <button class="tool-btn tool-btn-primary" id="gcosQuery">查询作品</button>
+        <label class="xmwp-label" for="gcosLimit">每页</label>
+        <select class="tool-select gcos-select" id="gcosLimit">
+          ${LIMITS.map(function (n) { return '<option value="' + n + '">' + n + ' 条</option>'; }).join('')}
+        </select>
       </div>
+      ${pager('gcosPagerTop')}
       <div class="gcos-feed" id="gcosFeed"></div>
-      <div class="gcos-status" id="gcosStatus">
-        <div class="xmwp-loading">正在拉取作品…</div>
-      </div>
+      <div class="gcos-status" id="gcosStatus"></div>
+      ${pager('gcosPagerBottom')}
     </div>
   `;
 
-  var refreshBtn = container.querySelector('#gcosRefresh');
-  var moreBtn = container.querySelector('#gcosMore');
+  var queryBtn = container.querySelector('#gcosQuery');
+  var limitSel = container.querySelector('#gcosLimit');
   var feed = container.querySelector('#gcosFeed');
   var status = container.querySelector('#gcosStatus');
+  var pagers = container.querySelectorAll('.gcos-pager');
 
   // 灯箱挂到 body，避免被祖先的 transform（动效/3D倾斜）影响导致 fixed 定位偏移
   document.querySelectorAll('.xmwp-lightbox').forEach(function (n) { n.remove(); });
@@ -46,9 +77,7 @@ window.DaibaoTools.createGenshinCos = function (container) {
   var lightClose = light.querySelector('.xmwp-light-close');
   var lightBg = light.querySelector('.xmwp-light-backdrop');
 
-  var state = { page: 1, loading: false, finished: false };
-  var seen = new Set(); // 翻页去重：created|title 作为唯一标识
-  var LIMIT = 10;
+  var state = { page: 1, limit: LIMITS[0], loading: false, queried: false, end: true, count: 0 };
 
   function el(tag, cls, text) {
     var e = document.createElement(tag);
@@ -63,8 +92,16 @@ window.DaibaoTools.createGenshinCos = function (container) {
     }
   }
 
-  function setStatus(html) {
-    status.innerHTML = html || '';
+  function setStatus(node) {
+    status.innerHTML = '';
+    if (node) status.appendChild(node);
+  }
+
+  function statusNode(cls, html) {
+    var d = document.createElement('div');
+    d.className = cls;
+    d.innerHTML = html;
+    return d;
   }
 
   function relTime(sec) {
@@ -78,64 +115,69 @@ window.DaibaoTools.createGenshinCos = function (container) {
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
 
-  function loadPage(reset) {
+  // 上下两组分页控件联动：任何时候都以 state 为准刷新
+  function syncPager() {
+    pagers.forEach(function (p) {
+      p.hidden = !state.queried;
+      var prev = p.querySelector('[data-act="prev"]');
+      var next = p.querySelector('[data-act="next"]');
+      var input = p.querySelector('.gcos-pginput');
+      var count = p.querySelector('.gcos-pgcount');
+      prev.disabled = state.loading || state.page <= 1;
+      next.disabled = state.loading || state.end;
+      input.disabled = state.loading;
+      if (input.value !== String(state.page)) input.value = String(state.page);
+      count.textContent = state.count ? '本页 ' + state.count + ' 条' : '';
+    });
+  }
+
+  function setBusy(on) {
+    state.loading = on;
+    queryBtn.disabled = on;
+    limitSel.disabled = on;
+    syncPager();
+  }
+
+  function goto(page) {
     if (state.loading) return;
-    if (reset) {
-      state.page = 1;
-      state.finished = false;
-      feed.innerHTML = '';
-      seen = new Set();
+    var n = Math.max(1, Math.floor(Number(page) || 1));
+    if (state.queried && n === state.page) {
+      // 同页重查视为刷新
     }
-    if (state.finished) return;
+    setBusy(true);
+    feed.innerHTML = '';
+    setStatus(statusNode('xmwp-loading', '正在加载第 ' + n + ' 页…'));
 
-    state.loading = true;
-    moreBtn.disabled = true;
-    refreshBtn.disabled = true;
-    setStatus('<div class="xmwp-loading">正在加载第 ' + state.page + ' 页…</div>');
-
-    var url = 'https://www.oiapi.net/api/MihoyoCos?page=' + state.page + '&limit=' + LIMIT;
+    var url = 'https://www.oiapi.net/api/MihoyoCos?page=' + n + '&limit=' + state.limit;
     fetch(url)
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function (json) {
         if (json.code !== 1 || !Array.isArray(json.data)) {
-          state.finished = true;
-          setStatus(reset
-            ? '<div class="tool-empty"><div class="tool-empty-icon">🎭</div><h3>暂无可展示的作品</h3><p>稍后重试或点击刷新</p></div>'
-            : '<div class="xmwp-end">没有更多了</div>');
-          return;
+          throw new Error((json && json.message) || '接口返回异常');
         }
         var posts = json.data;
-        var added = 0;
-        posts.forEach(function (post) {
-          var key = (post.created || '') + '|' + (post.title || '');
-          if (seen.has(key)) return;
-          seen.add(key);
-          feed.appendChild(buildPost(post));
-          added++;
-        });
+        state.queried = true;
+        state.page = n;
+        state.count = posts.length;
+        // 接口没有总数/末页字段：本页不足 limit 即认为是最后一页
+        state.end = posts.length < state.limit;
+
+        posts.forEach(function (post) { feed.appendChild(buildPost(post)); });
         notifyMotion(feed);
-        if (posts.length === 0 || added === 0) {
-          state.finished = true;
-          setStatus(reset
-            ? '<div class="tool-empty"><div class="tool-empty-icon">🎭</div><h3>暂无可展示的作品</h3><p>稍后重试或点击刷新</p></div>'
-            : '<div class="xmwp-end">没有更多了</div>');
+
+        if (!posts.length) {
+          state.end = true;
+          setStatus(statusNode('tool-empty', '<div class="tool-empty-icon">🍂</div><h3>第 ' + n + ' 页没有内容</h3><p>请回到上一页继续浏览</p>'));
         } else {
-          state.page++;
-          setStatus(added < posts.length
-            ? '<div class="xmwp-end">已过滤重复作品，没有更多了</div>'
-            : '');
+          setStatus(null);
         }
+        setBusy(false);
       })
       .catch(function (err) {
-        state.finished = false;
-        setStatus(reset
-          ? '<div class="tool-empty"><div class="tool-empty-icon">⚠️</div><h3>加载失败</h3><p>' + (err.message || '网络或跨域读取失败') + '</p></div>'
-          : '<div class="xmwp-end">加载出错，可点击下方按钮重试</div>');
-      })
-      .finally(function () {
-        state.loading = false;
-        moreBtn.disabled = state.finished;
-        refreshBtn.disabled = false;
+        state.count = 0;
+        feed.innerHTML = '';
+        setStatus(statusNode('tool-empty', '<div class="tool-empty-icon">⚠️</div><h3>加载失败</h3><p>' + ((err && err.message) || '网络或跨域读取失败') + '</p>'));
+        setBusy(false);
       });
   }
 
@@ -215,9 +257,28 @@ window.DaibaoTools.createGenshinCos = function (container) {
     if (e.key === 'Escape') closeLight();
   });
 
-  refreshBtn.addEventListener('click', function () { loadPage(true); });
-  moreBtn.addEventListener('click', function () { loadPage(false); });
+  // 两组分页器共用一套行为
+  pagers.forEach(function (p) {
+    var prev = p.querySelector('[data-act="prev"]');
+    var next = p.querySelector('[data-act="next"]');
+    var input = p.querySelector('.gcos-pginput');
+    prev.addEventListener('click', function () { goto(state.page - 1); });
+    next.addEventListener('click', function () { goto(state.page + 1); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); goto(input.value); }
+    });
+    input.addEventListener('change', function () { goto(input.value); });
+  });
 
-  loadPage(true);
+  queryBtn.addEventListener('click', function () { goto(1); });
+
+  limitSel.addEventListener('change', function () {
+    state.limit = Number(limitSel.value) || LIMITS[0];
+    goto(1); // 每页条数变化后回到第 1 页，页码语义才一致
+  });
+
+  // 默认不加载：先给一个可操作的空态
+  setStatus(statusNode('tool-empty', '<div class="tool-empty-icon">🎭</div><h3>尚未查询</h3><p>点击上方「查询作品」加载第 1 页内容</p>'));
+  syncPager();
   notifyMotion(container);
 };

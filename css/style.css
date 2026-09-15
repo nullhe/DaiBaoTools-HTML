@@ -2717,6 +2717,18 @@ a.ppn-title:hover { color: #0a5bb5; text-decoration: underline; }
 .gcos-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gcos-img-fallback { color: var(--text-muted); }
 
+/* 米游社原神COS · 上下双分页控件 */
+.gcos-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 16px 0; }
+.gcos-pager[hidden] { display: none; }
+.gcos-pgtext { font-size: 13px; color: var(--text-muted); }
+.gcos-pginput { width: 78px; text-align: center; -moz-appearance: textfield; }
+.gcos-pginput::-webkit-outer-spin-button,
+.gcos-pginput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.gcos-pgbtn { min-width: 84px; }
+.gcos-select { flex: 0 0 auto; width: 104px; }
+.gcos-pgcount { font-size: 12px; color: var(--text-muted); margin-left: 2px; }
+.gcos-status:empty { display: none; }
+
 [data-theme='dark'] .gcos-post { background: #161d26; border-color: #2c3744; }
 [data-theme='dark'] .gcos-nick { color: #e8edf2; }
 [data-theme='dark'] .gcos-time { color: #9aa7b3; }
