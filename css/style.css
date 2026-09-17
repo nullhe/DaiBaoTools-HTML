@@ -3523,4 +3523,44 @@ a.ppn-title:hover { color: #0a5bb5; text-decoration: underline; }
 [data-theme='dark'] .mrs-desc code { background: #0e141b; border-color: #2c3744; }
 [data-theme='dark'] .mrs-desc a { color: #6ea8fe; }
 
+/* ========================
+   网址导航（生活工具 L2）
+   ======================== */
+.sn-tool { display: flex; flex-direction: column; gap: 14px; }
+.sn-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sn-search { flex: 1 1 220px; max-width: 360px; }
+.sn-spacer { flex: 1 1 auto; }
+.sn-count { font-size: 13px; color: var(--text-muted); }
+.sn-cats { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sn-cat {
+  padding: 5px 14px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--bg-card); color: var(--text-main); font-size: 13px; cursor: pointer;
+  transition: all .15s ease;
+}
+.sn-cat:hover { border-color: var(--primary); }
+.sn-cat.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+.sn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; align-content: start; }
+.sn-card {
+  position: relative; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg-card); padding: 16px 14px 14px; overflow: hidden;
+  transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+.sn-card:hover { border-color: var(--primary); box-shadow: 0 4px 14px rgba(0,0,0,.08); transform: translateY(-2px); }
+.sn-open { position: absolute; inset: 0; z-index: 1; }
+.sn-icon { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; }
+.sn-icon-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sn-icon-letter { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 20px; }
+.sn-name { font-size: 15px; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sn-cat-tag { display: inline-block; margin: 6px 0; padding: 1px 8px; font-size: 11px; border-radius: 999px; background: var(--bg-page); color: var(--text-muted); border: 1px solid var(--border); }
+.sn-intro { font-size: 12px; color: var(--text-muted); line-height: 1.5; max-height: 3em; overflow: hidden; }
+.sn-url { margin-top: 8px; font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.sn-empty { padding: 50px 20px; text-align: center; color: var(--text-muted); font-size: 14px; }
+
+[data-theme='dark'] .sn-cat { background: #161d26; }
+[data-theme='dark'] .sn-card { background: #161d26; border-color: #2c3744; }
+[data-theme='dark'] .sn-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.4); }
+[data-theme='dark'] .sn-cat-tag { background: #0e141b; }
+
 

@@ -54,6 +54,7 @@ const categories = [
       { key: 'morse-tool', name: '摩斯电码', factory: DaibaoTools.createMorseTool },
       { key: 'garbage-tool', name: '垃圾分类', factory: DaibaoTools.createGarbageTool },
       { key: 'weather-tool', name: '天气查询', factory: DaibaoTools.createWeatherTool },
+      { key: 'site-nav-tool', name: '网址导航', factory: DaibaoTools.createSiteNavTool },
     ],
   },
   {
