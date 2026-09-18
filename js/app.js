@@ -7,14 +7,11 @@
 // 工具分类与工具定义
 const categories = [
   {
-    key: 'finance',
-    name: '财务工具',
-    icon: '💰',
-    tools: [
-      { key: 'vat-calculator', name: '增值税计算器', factory: DaibaoTools.createVatCalculator },
-      { key: 'tax-calculator', name: '个税计算器', factory: DaibaoTools.createTaxCalculator },
-      { key: 'unit-converter', name: '单位换算', factory: DaibaoTools.createUnitConverter },
-    ],
+    key: 'home',
+    name: '首页',
+    icon: '🏠',
+    isHome: true,
+    tools: [],
   },
   {
     key: 'dev',
@@ -36,6 +33,8 @@ const categories = [
     name: '办公工具',
     icon: '📄',
     tools: [
+      // 财务工具整体并入办公工具，作为二级菜单（其下 3 个原二级工具变为三级菜单），固定放第一位
+      { key: 'finance-tool', name: '财务工具', factory: DaibaoTools.createFinanceTool },
       { key: 'word-count', name: '字数统计', factory: DaibaoTools.createWordCount },
       { key: 'case-convert', name: '大小写转换', factory: DaibaoTools.createCaseConvert },
       { key: 'text-process', name: '文本批量处理', factory: DaibaoTools.createTextProcess },
@@ -54,7 +53,6 @@ const categories = [
       { key: 'morse-tool', name: '摩斯电码', factory: DaibaoTools.createMorseTool },
       { key: 'garbage-tool', name: '垃圾分类', factory: DaibaoTools.createGarbageTool },
       { key: 'weather-tool', name: '天气查询', factory: DaibaoTools.createWeatherTool },
-      { key: 'site-nav-tool', name: '网址导航', factory: DaibaoTools.createSiteNavTool },
     ],
   },
   {
@@ -99,12 +97,13 @@ const categories = [
 ];
 
 // 当前状态
-let currentCategory = 'finance';
-let currentTool = 'vat-calculator';
+let currentCategory = 'home';
+let currentTool = 'finance-tool';
 
 // DOM 元素
 const mainNav = document.getElementById('mainNav');
 const subNavList = document.getElementById('subNavList');
+const subNavBar = document.getElementById('subNavBar');
 const appMain = document.getElementById('appMain');
 
 /**
@@ -155,9 +154,11 @@ function renderMainNav() {
       const catKey = item.dataset.category;
       if (catKey === currentCategory) return;
       currentCategory = catKey;
-      // 默认选中该分类下第一个工具
+      // 默认选中该分类下第一个工具（首页无需工具）
       const category = categories.find((c) => c.key === catKey);
-      currentTool = category.tools[0].key;
+      if (category && category.tools && category.tools.length) {
+        currentTool = category.tools[0].key;
+      }
       renderMainNav();
       renderSubNav();
       renderTool();
@@ -171,6 +172,9 @@ function renderMainNav() {
 function renderSubNav() {
   const category = categories.find((c) => c.key === currentCategory);
   if (!category) return;
+  // 首页是导航落地页，不需要二级工具菜单
+  subNavBar.hidden = !!category.isHome;
+  if (category.isHome) { subNavList.innerHTML = ''; return; }
 
   subNavList.innerHTML = category.tools
     .map(
@@ -199,6 +203,23 @@ function renderSubNav() {
 function renderTool() {
   const category = categories.find((c) => c.key === currentCategory);
   if (!category) return;
+
+  // 首页：渲染独立的导航落地页（不使用 tool-card 包裹）
+  if (category.isHome) {
+    appMain.innerHTML = '';
+    try {
+      if (typeof DaibaoTools.createHomePage === 'function') {
+        DaibaoTools.createHomePage(appMain);
+      } else {
+        appMain.innerHTML = '<div class="tool-empty"><div class="tool-empty-icon">🏠</div><h3>首页模块未加载</h3><p>js/tools/home-page.js 未正确引入。</p></div>';
+      }
+    } catch (err) {
+      appMain.innerHTML = '<div class="tool-empty"><div class="tool-empty-icon">⚠️</div><h3>首页加载出错</h3><p>' + (err && err.message ? err.message : err) + '</p></div>';
+    }
+    afterRender(appMain);
+    return;
+  }
+
   const tool = category.tools.find((t) => t.key === currentTool);
   if (!tool) return;
 
